@@ -9,7 +9,7 @@ const siteFooterElement = document.querySelector('.footer');
 const siteFooterStatistic = siteFooterElement.querySelector('.footer__statistics');
 const pagePresenter = new PagePresenter();
 
-render( new UserProfileView(), siteHeaderElement);
-render( new FooterStatisticView(), siteFooterStatistic);
+render(new UserProfileView(), siteHeaderElement);
+render(new FooterStatisticView(), siteFooterStatistic);
 
 pagePresenter.init(siteMainElement);
