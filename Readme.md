@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Эдуард Малюкин](https://up.htmlacademy.ru/ecmascript/18/user/2100191).
-* Наставник: `Неизвестно`.
+* Наставник: [Владимир Артюхов](https://htmlacademy.ru/profile/artman).
 
 ---
 
