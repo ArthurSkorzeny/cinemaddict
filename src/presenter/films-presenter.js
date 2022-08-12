@@ -7,6 +7,7 @@ import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import {render} from '../render.js';
 
+const START_FILMS_ON_PAGE = 5;
 
 export default class PagePresenter {
   filmsComponent = new FilmsView();
@@ -24,7 +25,7 @@ export default class PagePresenter {
     render(this.filmList, this.filmsComponent.getElement());
     render(this.filmListContainer, this.filmList.getElement());
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < START_FILMS_ON_PAGE;; i++) {
       render(new FilmCardView(), this.filmListContainer.getElement());
     }
 
