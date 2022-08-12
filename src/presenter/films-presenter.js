@@ -25,7 +25,7 @@ export default class PagePresenter {
     render(this.filmList, this.filmsComponent.getElement());
     render(this.filmListContainer, this.filmList.getElement());
 
-    for (let i = 0; i < START_FILMS_ON_PAGE;; i++) {
+    for (let i = 0; i < START_FILMS_ON_PAGE; i++) {
       render(new FilmCardView(), this.filmListContainer.getElement());
     }
 
