@@ -16,3 +16,4 @@ render(new UserProfileView(), siteHeaderElement);
 render(new FooterStatisticView(), siteFooterStatistic);
 
 pagePresenter.init(siteMainElement, cardPresenter);
+pagePresenter.init(siteMainElement);
