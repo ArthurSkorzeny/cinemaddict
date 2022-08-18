@@ -9,10 +9,10 @@ const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 const siteFooterStatistic = siteFooterElement.querySelector('.footer__statistics');
 
-const cardPresenter = new CardsModel();
+const cardsModel = new CardsModel();
 const pagePresenter = new PagePresenter();
 
 render(new UserProfileView(), siteHeaderElement);
 render(new FooterStatisticView(), siteFooterStatistic);
 
-pagePresenter.init(siteMainElement, cardPresenter);
+pagePresenter.init(siteMainElement, cardsModel);
