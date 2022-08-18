@@ -1,4 +1,4 @@
-import {generateRandomPart, getRandomInteger} from '../utils.js';
+import {generateRandomPart, getRandomInteger, getRandomNumber} from '../utils.js';
 
 const posters = [
   'made-for-each-other.png',
@@ -47,7 +47,7 @@ export const generateFilmCard = () => ({
   'filmInfo': {
     'title': generateRandomPart(titles),
     'alternativeTitle': 'Laziness Who Sold Themselves',
-    'totalRating': 5.3,
+    'totalRating': getRandomNumber(4, 10, 1),
     'poster': `./images/posters/${generateRandomPart(posters)}`,
     'ageRating': 0,
     'director': 'Tom Ford',
