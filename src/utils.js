@@ -5,6 +5,12 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
+const getRandomNumber = (min, max, precision) => {
+  const x = Math.random() * (max - min) + min;
+  const p = Math.pow(10, precision);
+  return Math.round(x * p) / p;
+};
+
 const getYear = (date) => date.replace(/['']+/g, '').substring(0, 4);
 
 const generateRandomPart = (massive) => {
@@ -14,4 +20,4 @@ const generateRandomPart = (massive) => {
   return massive[randomIndex];
 };
 
-export {getRandomInteger, getYear, generateRandomPart};
+export {getRandomInteger, getYear, generateRandomPart, getRandomNumber};
