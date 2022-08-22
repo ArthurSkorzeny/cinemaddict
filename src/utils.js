@@ -13,11 +13,11 @@ const getRandomNumber = (min, max, precision) => {
 
 const getYear = (date) => date.replace(/['']+/g, '').substring(0, 4);
 
-const generateRandomPart = (massive) => {
+const generateRandomPart = (array) => {
 
-  const randomIndex = getRandomInteger(0, massive.length - 1);
+  const randomIndex = getRandomInteger(0, array.length - 1);
 
-  return massive[randomIndex];
+  return array[randomIndex];
 };
 
 export {getRandomInteger, getYear, generateRandomPart, getRandomNumber};

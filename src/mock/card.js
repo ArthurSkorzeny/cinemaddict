@@ -20,6 +20,16 @@ const titles = [
   'The Man with the Golden Arm',
 ];
 
+const altTitles = [
+  'A Little Pony Without The Carpet',
+  'Made for Each Other',
+  'Sagebrush Trail',
+  'The Great Flamarion',
+  'Santa Claus Conquers the Martians',
+  'The Dance of Life',
+  'The Man with the Golden Arm',
+];
+
 const genres = [
   'Action',
   'Comedy',
@@ -40,26 +50,72 @@ const descriptions = [
   'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
 ];
 
+const directors = [
+  'James Cameron',
+  'Christopher Nolan',
+  'Martin Scorsese',
+  'Steven Spielberg',
+  'Ridley Scott',
+  'Stanley Kubrick',
+  'Luc Besson',
+];
 
+const writers = [
+  'Woody Allen',
+  'Billy Wilder',
+  'William Goldman',
+  'Ben Hecht',
+  'Ridley Scott',
+  'Robert Towne',
+  'Joel Coen',
+];
+
+const actors = [
+  'Marlon Brando',
+  'Christian Bale',
+  'Morgan Freeman',
+  'Heath Ledger',
+  'Liam Neeson',
+  'Jason Statham',
+  'Vin Diesel',
+];
+
+const countries = [
+  'USA',
+  'Germany',
+  'Canada',
+  'France',
+  'Italia',
+  'South Korea',
+  'Russia',
+];
+
+const ageRating = [
+  '8+',
+  '12+',
+  '14+',
+  '16+',
+  '18+',
+];
 export const generateFilmCard = () => ({
   'id': getRandomInteger(1, 100),
   'comments': Array.from({length: getRandomInteger(2, 45)}, () => Math.floor(Math.random() * getRandomInteger(2, 45))),
   'filmInfo': {
     'title': generateRandomPart(titles),
-    'alternativeTitle': 'Laziness Who Sold Themselves',
+    'alternativeTitle': generateRandomPart(altTitles),
     'totalRating': getRandomNumber(4, 10, 1),
     'poster': `./images/posters/${generateRandomPart(posters)}`,
-    'ageRating': 0,
-    'director': 'Tom Ford',
+    'ageRating': generateRandomPart(ageRating),
+    'director': generateRandomPart(directors),
     'writers': [
-      'Takeshi Kitano'
+      generateRandomPart(writers)
     ],
     'actors': [
-      'Morgan Freeman'
+      generateRandomPart(actors)
     ],
     'release': {
       'date': `${getRandomInteger(1954, 2022)}-05-11T00:00:00.000Z`,
-      'releaseCountry': 'Finland'
+      'releaseCountry': generateRandomPart(countries)
     },
     'runtime': getRandomInteger(60,134),
     'genre': [
@@ -70,7 +126,7 @@ export const generateFilmCard = () => ({
   'userDetails': {
     'watchlist': Boolean(getRandomInteger(0, 1)),
     'alreadyWatched': Boolean(getRandomInteger(0, 1)),
-    'watchingDate': '2019-04-12T16:12:32.554Z',
+    'watchingDate': `${getRandomInteger(2019, 2022)}-04-12T16:12:32.554Z`,
     'favorite': Boolean(getRandomInteger(0, 1))
   }
 });

@@ -1,12 +1,12 @@
 import {createElement} from '../render.js';
 
-const createFilmListContainerTemplate = () => ('<div class="films-list__container"></div>');
+const createPopupBottomContainerTemplate = () => ('<div class="film-details__bottom-container"></div>');
 
-export default class FilmListContainerView {
+export default class FilmDetailsBottomContainerView {
   #element = null;
 
   get template() {
-    return createFilmListContainerTemplate();
+    return createPopupBottomContainerTemplate();
   }
 
   get element() {
