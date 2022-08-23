@@ -7,7 +7,7 @@ const siteFooterElement = document.querySelector('.footer');
 const siteFooterStatistic = siteFooterElement.querySelector('.footer__statistics');
 
 const cardsModel = new CardsModel();
-const pagePresenter = new PagePresenter();
+const pagePresenter = new PagePresenter(siteMainElement, cardsModel, siteHeaderElement, siteFooterStatistic);
 
 
-pagePresenter.init(siteMainElement, cardsModel, siteHeaderElement, siteFooterStatistic);
+pagePresenter.init();
