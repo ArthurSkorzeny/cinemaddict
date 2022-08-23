@@ -48,40 +48,17 @@ export default class PagePresenter {
   #pageFilms = [];
   #renderedFilmsCount = FILMS_PER_CLICK;
 
-  init = (pageContainer, cardsModel, headerContainer, footerContainer) => {
+  constructor(pageContainer, cardsModel, headerContainer, footerContainer) {
     this.#headerContainer = headerContainer;
     this.#footerContainer = footerContainer;
 
     this.#pageContainer = pageContainer;
     this.#cardsModel = cardsModel;
+  }
 
+  init = () => {
     this.#pageFilms = [...this.#cardsModel.cards];
-
-
-    if(this.#pageFilms.every((card) => card.isArchive)){
-      render(new EmptyFilmsListView(), this.#pageContainer);
-      render(new FooterStatisticView(), this.#footerContainer);
-    } else {
-      render(new UserProfileView(), this.#headerContainer);
-      render(new FooterStatisticView(), this.#footerContainer);
-
-      render(new NavigationButtonsView(), this.#pageContainer);
-      render(new SortButtonsView(), this.#pageContainer);
-
-      render(this.#filmsComponent, this.#pageContainer);
-      render(this.#filmListComponent, this.#filmsComponent.element);
-      render(this.#filmListContainerComponent, this.#filmListComponent.element);
-
-      for (let i = 0; i < Math.min(this.#pageFilms.length, FILMS_PER_CLICK); i++) {
-        this.#renderCard(this.#pageFilms[i]);
-      }
-
-      if (this.#pageFilms.length > FILMS_PER_CLICK) {
-        render(this.#showMoreButtonComponent, this.#filmsComponent.element);
-
-        this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick);
-      }
-    }
+    this.#renderPage();
   };
 
 
@@ -99,7 +76,6 @@ export default class PagePresenter {
     }
   };
 
-
   #renderCard = (card) => {
 
     const filmsComponent = new FilmCardView(card);
@@ -115,7 +91,7 @@ export default class PagePresenter {
     };
 
     const closePopup = () => {
-      document.body.querySelector('.film-details').remove();
+      document.body.querySelector('.main').querySelector('.film-details').remove();
     };
 
     const onEscKeyDown = (evt) => {
@@ -141,5 +117,33 @@ export default class PagePresenter {
     });
 
     render(filmsComponent, this.#filmListContainerComponent.element);
+  };
+
+  #renderPage = () => {
+    if(this.#pageFilms.every((card) => card.isArchive)){
+      render(new EmptyFilmsListView(), this.#pageContainer);
+      render(new FooterStatisticView(), this.#footerContainer);
+    } else {
+      render(new UserProfileView(), this.#headerContainer);
+      render(new FooterStatisticView(), this.#footerContainer);
+
+      render(new NavigationButtonsView(), this.#pageContainer);
+      render(new SortButtonsView(), this.#pageContainer);
+
+      render(this.#filmsComponent, this.#pageContainer);
+      render(this.#filmListComponent, this.#filmsComponent.element);
+      render(this.#filmListContainerComponent, this.#filmListComponent.element);
+
+      for (let i = 0; i < Math.min(this.#pageFilms.length, FILMS_PER_CLICK); i++) {
+        this.#renderCard(this.#pageFilms[i]);
+      }
+
+      if (this.#pageFilms.length > FILMS_PER_CLICK) {
+        render(this.#showMoreButtonComponent, this.#filmsComponent.element);
+
+        this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick);
+      }
+    }
+
   };
 }
