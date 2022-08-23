@@ -1,8 +1,7 @@
 import {createElement} from '../render.js';
 
 const createFilmPopupTemplate = () => (
-  `
-    <div class="film-details__top-container">
+  `<div class="film-details__top-container">
     <div class="film-details__close">
       <button class="film-details__close-btn" type="button">close</button>
     </div>
@@ -70,8 +69,7 @@ const createFilmPopupTemplate = () => (
       <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
       <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
     </section>
-  </div>
-`
+  </div>`
 );
 export default class FilmPopupView {
   #element = null;
