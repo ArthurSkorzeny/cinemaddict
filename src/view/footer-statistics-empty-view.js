@@ -1,12 +1,12 @@
 import {createElement} from '../render.js';
 
-const createFilmListContainerTemplate = () => ('<div class="films-list__container"></div>');
+const createFooterStatisticEmptyTemplate = () => ('<p>0 movies inside</p>');
 
-export default class FilmListContainerView {
+export default class FooterStatisticEmptyView {
   #element = null;
 
   get template() {
-    return createFilmListContainerTemplate();
+    return createFooterStatisticEmptyTemplate();
   }
 
   get element() {

@@ -1,8 +1,10 @@
 import {generateFilmCard} from '../mock/card.js';
-const START_FILMS_ON_PAGE = 5;
+const START_FILMS_ON_PAGE = 22;
 
 export default class CardsModel {
-  cards = Array.from({length: START_FILMS_ON_PAGE}, generateFilmCard);
+  #cards = Array.from({length: START_FILMS_ON_PAGE}, generateFilmCard);
 
-  getCards = () => this.cards;
+  get cards() {
+    return this.#cards;
+  }
 }
