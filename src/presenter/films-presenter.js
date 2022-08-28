@@ -20,7 +20,7 @@ import FilmCommentView from '../view/popup-comment-view.js';
 
 import EmptyFilmsListView from '../view/films-list-empty-view.js';
 
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 
 const FILMS_PER_CLICK = 5;
 
@@ -62,8 +62,7 @@ export default class PagePresenter {
   };
 
 
-  #handleShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
+  #handleShowMoreButtonClick = () => {
     this.#pageFilms
       .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_PER_CLICK)
       .forEach((card) => this.#renderCard(card));
@@ -103,17 +102,19 @@ export default class PagePresenter {
       }
     };
 
-    filmsComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+    const closePopupButton = () => {
+      closePopup();
+      document.removeEventListener('keydown', onEscKeyDown);
+      this.#popupComponent.deleteClickHandler(closePopupButton);
+      document.querySelector('body').classList.remove('hide-overflow');
+    };
+
+
+    filmsComponent.setClickHandler(() => {
       document.querySelector('body').classList.add('hide-overflow');
       openPopup();
       document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    this.#popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
-      evt.preventDefault();
-      document.querySelector('body').classList.remove('hide-overflow');
-      closePopup();
-      document.removeEventListener('keydown', onEscKeyDown);
+      this.#popupComponent.setClickHandler(closePopupButton);
     });
 
     render(filmsComponent, this.#filmListContainerComponent.element);
@@ -141,7 +142,7 @@ export default class PagePresenter {
       if (this.#pageFilms.length > FILMS_PER_CLICK) {
         render(this.#showMoreButtonComponent, this.#filmsComponent.element);
 
-        this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick);
+        this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
       }
     }
 

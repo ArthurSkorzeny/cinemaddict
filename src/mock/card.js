@@ -20,16 +20,6 @@ const titles = [
   'The Man with the Golden Arm',
 ];
 
-const altTitles = [
-  'A Little Pony Without The Carpet',
-  'Made for Each Other',
-  'Sagebrush Trail',
-  'The Great Flamarion',
-  'Santa Claus Conquers the Martians',
-  'The Dance of Life',
-  'The Man with the Golden Arm',
-];
-
 const genres = [
   'Action',
   'Comedy',
@@ -102,7 +92,7 @@ export const generateFilmCard = () => ({
   'comments': Array.from({length: getRandomInteger(2, 45)}, () => Math.floor(Math.random() * getRandomInteger(2, 45))),
   'filmInfo': {
     'title': generateRandomPart(titles),
-    'alternativeTitle': generateRandomPart(altTitles),
+    'alternativeTitle': generateRandomPart(titles),
     'totalRating': getRandomNumber(4, 10, 1),
     'poster': `./images/posters/${generateRandomPart(posters)}`,
     'ageRating': generateRandomPart(ageRating),
