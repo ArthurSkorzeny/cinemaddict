@@ -20,6 +20,7 @@ import FilmCommentView from '../view/popup-comment-view.js';
 
 import EmptyFilmsListView from '../view/films-list-empty-view.js';
 
+import {generateFilter} from '../mock/films-navigation.js';
 import {render} from '../framework/render.js';
 
 const FILMS_PER_CLICK = 5;
@@ -121,6 +122,7 @@ export default class PagePresenter {
   };
 
   #renderPage = () => {
+    const filtersCount = generateFilter();
     if(this.#pageFilms.every((card) => card.isArchive)){
       render(new EmptyFilmsListView(), this.#pageContainer);
       render(new FooterStatisticView(), this.#footerContainer);
@@ -128,7 +130,7 @@ export default class PagePresenter {
       render(new UserProfileView(), this.#headerContainer);
       render(new FooterStatisticView(), this.#footerContainer);
 
-      render(new NavigationButtonsView(), this.#pageContainer);
+      render(new NavigationButtonsView(filtersCount), this.#pageContainer);
       render(new SortButtonsView(), this.#pageContainer);
 
       render(this.#filmsComponent, this.#pageContainer);
