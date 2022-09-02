@@ -1,4 +1,5 @@
-import {generateRandomPart, getRandomInteger, getRandomNumber} from '../utils.js';
+import {generateRandomPart, getRandomInteger, getRandomNumber} from '../utils/common';
+import {nanoid} from 'nanoid';
 
 const posters = [
   'made-for-each-other.png',
@@ -88,7 +89,7 @@ const ageRating = [
   '18+',
 ];
 export const generateFilmCard = () => ({
-  'id': getRandomInteger(1, 100),
+  'id': nanoid(),
   'comments': Array.from({length: getRandomInteger(2, 45)}, () => Math.floor(Math.random() * getRandomInteger(2, 45))),
   'filmInfo': {
     'title': generateRandomPart(titles),
