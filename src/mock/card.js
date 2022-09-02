@@ -88,6 +88,7 @@ const ageRating = [
   '16+',
   '18+',
 ];
+
 export const generateFilmCard = () => ({
   'id': nanoid(),
   'comments': Array.from({length: getRandomInteger(2, 45)}, () => Math.floor(Math.random() * getRandomInteger(2, 45))),
@@ -115,9 +116,9 @@ export const generateFilmCard = () => ({
     'description': generateRandomPart(descriptions)
   },
   'userDetails': {
-    'watchlist': Boolean(getRandomInteger(0, 1)),
-    'alreadyWatched': Boolean(getRandomInteger(0, 1)),
+    'watchlist': Boolean(getRandomInteger(0,4)),
+    'alreadyWatched': Boolean(getRandomInteger(0,4)),
     'watchingDate': `${getRandomInteger(2019, 2022)}-04-12T16:12:32.554Z`,
-    'favorite': Boolean(getRandomInteger(0, 1))
+    'favorite': Boolean(getRandomInteger(0,4))
   }
 });

@@ -34,4 +34,12 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem};
+const getFilterType = (filterNumber) => {
+  if(filterNumber === false){
+    return ['film-card__controls-item--active','film-details__control-button--active'];
+  }else{
+    return '';
+  }
+};
+
+export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, getFilterType};

@@ -1,9 +1,9 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getYear} from '../utils/common';
+import {getYear, getFilterType} from '../utils/common';
 
 
 const createFilmCardTemplate = (card) => {
-  const {comments, filmInfo} = card;
+  const {comments, filmInfo, userDetails} = card;
 
   return (
     `<article class="film-card">
@@ -20,9 +20,9 @@ const createFilmCardTemplate = (card) => {
        <span class="film-card__comments">${comments.length}</span>
      </a>
      <div class="film-card__controls">
-       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-       <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-       <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${getFilterType(userDetails.watchlist)[0]}" type="button">Add to watchlist</button>
+       <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${getFilterType(userDetails.alreadyWatched)[0]}" type="button">Mark as watched</button>
+       <button class="film-card__controls-item film-card__controls-item--favorite ${getFilterType(userDetails.favorite)[0]}" type="button">Mark as favorite</button>
      </div>
    </article>`
   );

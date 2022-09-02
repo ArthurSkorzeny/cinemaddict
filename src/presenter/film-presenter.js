@@ -54,7 +54,7 @@ export default class FilmPresenter {
 
     this.#popupSection = new FilmsDetailsView();
     this.#popupInner = new FilmDeatilsInnerView;
-    this.#popupComponent = new FilmPopupView();
+    this.#popupComponent = new FilmPopupView(this.#card);
 
     this.#popupBottomContainer = new FilmDetailsBottomContainerView();
     this.#popupCommentsWrap = new FilmDetailsCommentsWrapView;
@@ -63,8 +63,8 @@ export default class FilmPresenter {
 
     this.#filmComponent.setClickHandler(this.#handleOpenClick);
     this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#popupComponent.setWatchListHandler(this.#handleWatchListClick);
-    this.#popupComponent.setWatchedClickHandler(this.#handleWatchedClick);
+    this.#popupComponent.setWatchlistClickHandler(this.#handleWatchListClick);
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
 
     if (prevFilmComponent === null || prevFilmPopupComponent === null){
       render(this.#filmComponent, this.#filmListContainer);
@@ -132,16 +132,13 @@ export default class FilmPresenter {
 
   #handleFavoriteClick = () => {
     this.#changeData({...this.#card, favorite: !this.#card.favorite});
-    this.#popupComponent.setActiveFavorite();
   };
 
   #handleWatchListClick = () => {
     this.#changeData({...this.#card, watchlist: !this.#card.watchlist});
-    this.#popupComponent.setActiveWatchList();
   };
 
   #handleWatchedClick = () => {
     this.#changeData({...this.#card, alreadyWatched: !this.#card.alreadyWatched});
-    this.#popupComponent.setActiveWatched();
   };
 }

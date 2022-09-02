@@ -120,6 +120,7 @@ export default class PagePresenter {
 
   #handleFilmChange = (updatedFilm) => {
     this.#pageFilms = updateItem(this.#pageFilms, updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
   };
 
   #renderSortButtons = () => {
