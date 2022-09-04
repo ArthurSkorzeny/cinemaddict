@@ -37,10 +37,10 @@ export default class FilmPresenter {
   #popupCommentsList = null;
   //#popupComment = null;
 
-  constructor(filmListContainer, changeData, changeMode) {
-    this.#filmListContainer = filmListContainer;
-    this.#changeData = changeData;
-    this.#changeMode = changeMode;
+  constructor(filmPresenterArguments) {
+    this.#filmListContainer = filmPresenterArguments.filmlist;
+    this.#changeData = filmPresenterArguments.filmDataChange;
+    this.#changeMode = filmPresenterArguments.pageModeChange;
   }
 
   init = (card, pageContainer) => {

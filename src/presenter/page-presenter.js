@@ -53,7 +53,13 @@ export default class PagePresenter {
   };
 
   #renderCard = (card) => {
-    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent.element, this.#handleFilmChange, this.#handleModeChange);
+    const filmPresenterArguments = {
+      'filmlist':this.#filmListContainerComponent.element,
+      'filmDataChange':this.#handleFilmChange,
+      'pageModeChange':this.#handleModeChange,
+    };
+
+    const filmPresenter = new FilmPresenter(filmPresenterArguments);
     filmPresenter.init(card, this.#pageContainer);
     this.#filmPresenter.set(card.id, filmPresenter);
   };
