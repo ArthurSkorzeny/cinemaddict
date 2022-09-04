@@ -64,12 +64,12 @@ export default class PagePresenter {
       .forEach((card) => this.#renderCard(card));
   };
 
-  #clearFilms = () =>{
+  /*#clearFilms = () =>{
     this.filmPresenter.forEach((presenter) => presenter.destroy);
     this.filmPresenter.clear();
     this.#renderedFilmsCount = FILMS_PER_CLICK;
     remove(this.#showMoreButtonComponent);
-  };
+  };*/
 
   #renderFilmsList = () => {
     render(this.#filmsComponent, this.#pageContainer);

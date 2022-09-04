@@ -105,7 +105,6 @@ export default class FilmPresenter {
   };
 
   #closePopup = () => {
-    //document.body.querySelector('.main').querySelector('.film-details').remove();
     remove(this.#popupSection);
     document.querySelector('body').classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#escKeyDownHandler);
@@ -117,28 +116,27 @@ export default class FilmPresenter {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#closePopup();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 
   #handleOpenClick = () => {
+    this.#changeMode();
+    this.#mode = Mode.POPUP;
     document.querySelector('body').classList.add('hide-overflow');
     this.#openPopup();
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.setClickHandler(this.#closePopup);
-    this.#changeMode();
-    this.#mode = Mode.POPUP;
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#card, favorite: !this.#card.favorite});
+    this.#changeData({...this.#card, favorite: !this.#card.userDetails.favorite});
   };
 
   #handleWatchListClick = () => {
-    this.#changeData({...this.#card, watchlist: !this.#card.watchlist});
+    this.#changeData({...this.#card, watchlist: !this.#card.userDetails.watchlist});
   };
 
   #handleWatchedClick = () => {
-    this.#changeData({...this.#card, alreadyWatched: !this.#card.alreadyWatched});
+    this.#changeData({...this.#card, alreadyWatched: !this.#card.userDetails.alreadyWatched});
   };
 }

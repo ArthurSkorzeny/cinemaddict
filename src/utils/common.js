@@ -20,6 +20,14 @@ const generateRandomPart = (array) => {
   return array[randomIndex];
 };
 
+const getFilterType = (filterNumber) => {
+  if(filterNumber === false){
+    return ['film-card__controls-item--active','film-details__control-button--active'];
+  }else{
+    return '';
+  }
+};
+
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
@@ -32,14 +40,6 @@ const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
-};
-
-const getFilterType = (filterNumber) => {
-  if(filterNumber === false){
-    return ['film-card__controls-item--active','film-details__control-button--active'];
-  }else{
-    return '';
-  }
 };
 
 export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, getFilterType};
