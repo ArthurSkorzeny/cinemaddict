@@ -20,14 +20,6 @@ const generateRandomPart = (array) => {
   return array[randomIndex];
 };
 
-const getFilterType = (filterNumber) => {
-  if(filterNumber === false){
-    return ['film-card__controls-item--active','film-details__control-button--active'];
-  }else{
-    return '';
-  }
-};
-
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
@@ -42,4 +34,8 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, getFilterType};
+const sortByDate = (a, b) => (getYear(a.filmInfo.release.date) > getYear(b.filmInfo.release.date)) ? -1 : 1;
+
+const sortByRating = (a, b) => (a.filmInfo.totalRating > b.filmInfo.totalRating) ? -1 : 1;
+
+export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, sortByDate, sortByRating};

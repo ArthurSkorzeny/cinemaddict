@@ -1,8 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getYear, getFilterType} from '../utils/common';
+import {getYear} from '../utils/common';
 
 const createFilmPopupTemplate = (card) => {
   const {filmInfo, userDetails} = card;
+
+  const getFilterType = (filterValue) => filterValue === false ? 'film-details__control-button--active' : '';
 
   return (
     `<div class="film-details__top-container">
@@ -69,9 +71,9 @@ const createFilmPopupTemplate = (card) => {
     </div>
 
     <section class="film-details__controls">
-      <button type="button" class="film-details__control-button film-details__control-button--watchlist ${getFilterType(userDetails.watchlist)[1]}" id="watchlist" name="watchlist">Add to watchlist</button>
-      <button type="button" class="film-details__control-button film-details__control-button--watched ${getFilterType(userDetails.alreadyWatched)[1]}" id="watched" name="watched">Already watched</button>
-      <button type="button" class="film-details__control-button film-details__control-button--favorite ${getFilterType(userDetails.favorite)[1]}" id="favorite" name="favorite">Add to favorites</button>
+      <button type="button" class="film-details__control-button film-details__control-button--watchlist ${getFilterType(userDetails.watchlist)}" id="watchlist" name="watchlist">Add to watchlist</button>
+      <button type="button" class="film-details__control-button film-details__control-button--watched ${getFilterType(userDetails.alreadyWatched)}" id="watched" name="watched">Already watched</button>
+      <button type="button" class="film-details__control-button film-details__control-button--favorite ${getFilterType(userDetails.favorite)}" id="favorite" name="favorite">Add to favorites</button>
     </section>
   </div>`
   );

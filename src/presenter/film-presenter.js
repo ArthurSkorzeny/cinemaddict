@@ -37,10 +37,10 @@ export default class FilmPresenter {
   #popupCommentsList = null;
   //#popupComment = null;
 
-  constructor(filmPresenterArguments) {
-    this.#filmListContainer = filmPresenterArguments.filmlist;
-    this.#changeData = filmPresenterArguments.filmDataChange;
-    this.#changeMode = filmPresenterArguments.pageModeChange;
+  constructor({filmlistContainer, filmDataChange, pageModeChange}) {
+    this.#filmListContainer = filmlistContainer;
+    this.#changeData = filmDataChange;
+    this.#changeMode = pageModeChange;
   }
 
   init = (card, pageContainer) => {
@@ -62,6 +62,7 @@ export default class FilmPresenter {
     //this.#popupComment = new FilmCommentView();
 
     this.#filmComponent.setClickHandler(this.#handleOpenClick);
+
     this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#popupComponent.setWatchlistClickHandler(this.#handleWatchListClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
@@ -129,14 +130,32 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#card, favorite: !this.#card.userDetails.favorite});
+    this.#changeData({
+      ...this.#card,
+      userDetails: {
+        ...this.#card.userDetails,
+        favorite: !this.#card.userDetails.favorite
+      }
+    });
   };
 
   #handleWatchListClick = () => {
-    this.#changeData({...this.#card, watchlist: !this.#card.userDetails.watchlist});
+    this.#changeData({
+      ...this.#card,
+      userDetails: {
+        ...this.#card.userDetails,
+        watchlist: !this.#card.userDetails.watchlist
+      }
+    });
   };
 
   #handleWatchedClick = () => {
-    this.#changeData({...this.#card, alreadyWatched: !this.#card.userDetails.alreadyWatched});
+    this.#changeData({
+      ...this.#card,
+      userDetails: {
+        ...this.#card.userDetails,
+        alreadyWatched: !this.#card.userDetails.alreadyWatched
+      }
+    });
   };
 }

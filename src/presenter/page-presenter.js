@@ -13,12 +13,17 @@ import UserProfileView from '../view/header-profile-view.js';
 import FooterStatisticView from '../view/footer-statistics-view.js';
 
 import EmptyFilmsListView from '../view/films-list-empty-view.js';
-import {updateItem} from '../utils/common.js';
+import {updateItem, sortByDate, sortByRating} from '../utils/common.js';
 
 import {generateFilter} from '../mock/films-navigation.js';
 
 const FILMS_PER_CLICK = 5;
 
+const sortModes = {
+  default: 3,
+  date: 1,
+  rating: 2,
+};
 
 export default class PagePresenter {
   #pageContainer = null;
@@ -30,8 +35,11 @@ export default class PagePresenter {
   #filmListComponent = new FilmsListView();
   #filmListContainerComponent = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
+  #navigationButtonsComponent = new SortButtonsView();
 
   #pageFilms = [];
+  #defaultPageFilms = [];
+
   #renderedFilmsCount = FILMS_PER_CLICK;
   #filmPresenter = new Map();
 
@@ -45,7 +53,9 @@ export default class PagePresenter {
 
   init = () => {
     this.#pageFilms = [...this.#cardsModel.cards];
-    this.#renderPage();
+    this.#defaultPageFilms = [...this.#cardsModel.cards];
+
+    this.#renderPage(this.#pageFilms);
   };
 
   #handleModeChange = () => {
@@ -54,8 +64,8 @@ export default class PagePresenter {
 
   #renderCard = (card) => {
     const filmPresenterArguments = {
-      'filmlist':this.#filmListContainerComponent.element,
-      'filmDataChange':this.#handleFilmChange,
+      'filmlistContainer':this.#filmListContainerComponent.element,
+      'filmDataChange':this.#handleFilmDataChange,
       'pageModeChange':this.#handleModeChange,
     };
 
@@ -70,20 +80,20 @@ export default class PagePresenter {
       .forEach((card) => this.#renderCard(card));
   };
 
-  /*#clearFilms = () =>{
-    this.filmPresenter.forEach((presenter) => presenter.destroy);
-    this.filmPresenter.clear();
+  #clearFilms = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
     this.#renderedFilmsCount = FILMS_PER_CLICK;
     remove(this.#showMoreButtonComponent);
-  };*/
+  };
 
-  #renderFilmsList = () => {
+  #renderFilmsList = (filmsArray) => {
     render(this.#filmsComponent, this.#pageContainer);
     render(this.#filmListComponent, this.#filmsComponent.element);
     render(this.#filmListContainerComponent, this.#filmListComponent.element);
 
     for (let i = 0; i < Math.min(this.#pageFilms.length, FILMS_PER_CLICK); i++) {
-      this.#renderCard(this.#pageFilms[i]);
+      this.#renderCard(filmsArray[i]);
     }
 
     if(this.#pageFilms.length > FILMS_PER_CLICK) {
@@ -119,22 +129,31 @@ export default class PagePresenter {
     render(new FooterStatisticView(), this.#footerContainer);
   };
 
+  //добавить отрисовку меток на фильмах, а не 0
+
   #renderNavigationButtons = () => {
     const filtersCount = generateFilter();
     render(new NavigationButtonsView(filtersCount), this.#pageContainer);
   };
 
-  #handleFilmChange = (updatedFilm) => {
+  #handleFilmDataChange = (updatedFilm) => {
     this.#pageFilms = updateItem(this.#pageFilms, updatedFilm);
-    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+    this.#defaultPageFilms = updateItem(this.#defaultPageFilms, updatedFilm);
+
+    if(this.#filmPresenter.get(updatedFilm.id).init(updatedFilm)){
+      this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+    }
   };
 
   #renderSortButtons = () => {
-    render(new SortButtonsView(), this.#pageContainer);
+    this.#navigationButtonsComponent.setDateClickHandler(this.#sortByDate);
+    this.#navigationButtonsComponent.setDefaultClickHandler(this.#sortByDefault);
+    this.#navigationButtonsComponent.setRatingClickHandler(this.#sortByRating);
+    render(this.#navigationButtonsComponent, this.#pageContainer);
   };
 
-  #renderPage = () => {
-    if(this.#pageFilms.every((card) => card.isArchive)){
+  #renderPage = (filmsArray) => {
+    if(filmsArray.every((card) => card.isArchive)){
 
       this.#emptyFilmsList();
 
@@ -145,7 +164,36 @@ export default class PagePresenter {
       this.#renderNavigationButtons();
       this.#renderSortButtons();
 
-      this.#renderFilmsList();
+      this.#renderFilmsList(filmsArray);
     }
+  };
+
+  filmsRenderMode = (filmsArray, mode) => {
+    if(mode === 1){
+      const sorted = filmsArray.sort(sortByDate);
+      this.#renderFilmsList(sorted);
+    }
+    if(mode === 2){
+      const sorted = filmsArray.sort(sortByRating);
+      this.#renderFilmsList(sorted);
+    }
+    if(mode === 3){
+      this.#renderFilmsList(this.#defaultPageFilms);
+    }
+  };
+
+  #sortByDefault = () => {
+    this.#clearFilms();
+    this.filmsRenderMode(this.#pageFilms, sortModes.default);
+  };
+
+  #sortByDate = () => {
+    this.#clearFilms();
+    this.filmsRenderMode(this.#pageFilms, sortModes.date);
+  };
+
+  #sortByRating = () => {
+    this.#clearFilms();
+    this.filmsRenderMode(this.#pageFilms, sortModes.rating);
   };
 }
