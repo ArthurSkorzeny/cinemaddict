@@ -26,7 +26,7 @@ export default class FilmPresenter {
   #card = null;
   #mode = Mode.CARD;
 
-  #filmComponent = null;
+  #filmCardComponent = null;
 
   #popupSection = null;
   #popupInner = null;
@@ -37,20 +37,20 @@ export default class FilmPresenter {
   #popupCommentsList = null;
   //#popupComment = null;
 
-  constructor({filmlistContainer, filmDataChange, pageModeChange}) {
+  constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer}) {
     this.#filmListContainer = filmlistContainer;
     this.#changeData = filmDataChange;
     this.#changeMode = pageModeChange;
+    this.#pageContainer = pageContainer;
   }
 
-  init = (card, pageContainer) => {
+  init = (card) => {
     this.#card = card;
-    this.#pageContainer = pageContainer;
 
-    const prevFilmComponent = this.#filmComponent;
+    const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopupComponent = this.#popupComponent;
 
-    this.#filmComponent = new FilmCardView(this.#card);
+    this.#filmCardComponent = new FilmCardView(this.#card);
 
     this.#popupSection = new FilmsDetailsView();
     this.#popupInner = new FilmDeatilsInnerView;
@@ -61,26 +61,25 @@ export default class FilmPresenter {
     this.#popupCommentsList = new FilmDetailsCommentsListView();
     //this.#popupComment = new FilmCommentView();
 
-    this.#filmComponent.setClickHandler(this.#handleOpenClick);
-
     this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#popupComponent.setWatchlistClickHandler(this.#handleWatchListClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
 
-    if (prevFilmComponent === null || prevFilmPopupComponent === null){
-      render(this.#filmComponent, this.#filmListContainer);
+    if (prevFilmCardComponent === null){
+      render(this.#filmCardComponent, this.#filmListContainer);
+      this.#filmCardComponent.setClickHandler(this.#handleOpenClick);
       return;
     }
 
-    if(this.#mode === Mode.CARD){
-      replace(this.#filmComponent, prevFilmComponent);
+    if (prevFilmPopupComponent === null){
+      render(this.#popupComponent, this.#pageContainer);
+      return;
     }
 
-    if(this.#mode === Mode.POPUP){
-      replace(this.#popupComponent, prevFilmPopupComponent);
-    }
+    replace(this.#filmCardComponent, prevFilmCardComponent);
+    replace(this.#popupComponent, prevFilmPopupComponent);
 
-    remove(prevFilmComponent);
+    remove(prevFilmCardComponent);
     remove(prevFilmPopupComponent);
   };
 
@@ -91,7 +90,7 @@ export default class FilmPresenter {
   };
 
   destroy = () => {
-    remove(this.#filmComponent);
+    remove(this.#filmCardComponent);
     remove(this.#popupComponent);
   };
 

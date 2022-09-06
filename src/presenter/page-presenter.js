@@ -67,6 +67,7 @@ export default class PagePresenter {
       'filmlistContainer':this.#filmListContainerComponent.element,
       'filmDataChange':this.#handleFilmDataChange,
       'pageModeChange':this.#handleModeChange,
+      'pageContainer':this.#pageContainer,
     };
 
     const filmPresenter = new FilmPresenter(filmPresenterArguments);
@@ -140,9 +141,7 @@ export default class PagePresenter {
     this.#pageFilms = updateItem(this.#pageFilms, updatedFilm);
     this.#defaultPageFilms = updateItem(this.#defaultPageFilms, updatedFilm);
 
-    if(this.#filmPresenter.get(updatedFilm.id).init(updatedFilm)){
-      this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
-    }
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
   };
 
   #renderSortButtons = () => {
@@ -157,15 +156,15 @@ export default class PagePresenter {
 
       this.#emptyFilmsList();
 
-    } else {
-
-      this.#renderUserProfile();
-      this.#renderFooterStatistic();
-      this.#renderNavigationButtons();
-      this.#renderSortButtons();
-
-      this.#renderFilmsList(filmsArray);
     }
+
+    this.#renderUserProfile();
+    this.#renderFooterStatistic();
+    this.#renderNavigationButtons();
+    this.#renderSortButtons();
+
+    this.#renderFilmsList(filmsArray);
+
   };
 
   filmsRenderMode = (filmsArray, mode) => {
