@@ -71,6 +71,7 @@ export default class FilmPresenter {
       return;
     } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);
+      this.#filmCardComponent.setClickHandler(this.#handleOpenClick);
       remove(prevFilmCardComponent);
     }
 
