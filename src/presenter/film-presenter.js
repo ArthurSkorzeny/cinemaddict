@@ -69,18 +69,20 @@ export default class FilmPresenter {
       render(this.#filmCardComponent, this.#filmListContainer);
       this.#filmCardComponent.setClickHandler(this.#handleOpenClick);
       return;
+    } else {
+      replace(this.#filmCardComponent, prevFilmCardComponent);
+      remove(prevFilmCardComponent);
     }
 
     if (prevFilmPopupComponent === null){
       render(this.#popupComponent, this.#pageContainer);
       return;
+    } else {
+      replace(this.#popupComponent, prevFilmPopupComponent);
+      document.querySelector('.film-details').remove();
+      this.#handleOpenClick();
+      remove(prevFilmPopupComponent);
     }
-
-    replace(this.#filmCardComponent, prevFilmCardComponent);
-    replace(this.#popupComponent, prevFilmPopupComponent);
-
-    remove(prevFilmCardComponent);
-    remove(prevFilmPopupComponent);
   };
 
   resetView = () => {
