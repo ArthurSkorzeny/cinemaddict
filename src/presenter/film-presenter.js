@@ -80,7 +80,8 @@ export default class FilmPresenter {
       return;
     } else {
       replace(this.#popupComponent, prevFilmPopupComponent);
-      document.querySelector('.film-details').remove();
+      this.#popupSection.deleteFilmDetailsSection();
+      //document.querySelector('.film-details').remove();
       this.#handleOpenClick();
       remove(prevFilmPopupComponent);
     }

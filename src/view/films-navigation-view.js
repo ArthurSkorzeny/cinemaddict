@@ -2,6 +2,11 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 const createNavigationButtonsTemplate = (filtersCount) => {
   const {watchlist, history, favorites} = filtersCount;
+  /*const navigationValues = () => {
+    let navigationValue = 0;
+
+    document.querySelectorAll('.film-card__controls-item').forEach()
+  };*/
   return (
     `<nav class="main-navigation">
        <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>

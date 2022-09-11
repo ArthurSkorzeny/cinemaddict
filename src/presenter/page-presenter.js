@@ -9,6 +9,8 @@ import ShowMoreButtonView from '../view/show-more-view.js';
 import FilmsListView from '../view/film-list-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 
+import FilmsDetailsView from '../view/film-details-section-view.js';
+
 import UserProfileView from '../view/header-profile-view.js';
 import FooterStatisticView from '../view/footer-statistics-view.js';
 
@@ -20,9 +22,9 @@ import {generateFilter} from '../mock/films-navigation.js';
 const FILMS_PER_CLICK = 5;
 
 const sortModes = {
-  default: 3,
-  date: 1,
-  rating: 2,
+  default: 'default',
+  date: 'date',
+  rating: 'rating',
 };
 
 export default class PagePresenter {
@@ -36,6 +38,8 @@ export default class PagePresenter {
   #filmListContainerComponent = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
   #navigationButtonsComponent = new SortButtonsView();
+
+  #popupSection = new FilmsDetailsView();
 
   #pageFilms = [];
   #defaultPageFilms = [];
@@ -168,30 +172,33 @@ export default class PagePresenter {
   };
 
   filmsRenderMode = (filmsArray, mode) => {
-    if(mode === 1){
+    if(mode === 'date'){
       const sorted = filmsArray.sort(sortByDate);
       this.#renderFilmsList(sorted);
     }
-    if(mode === 2){
+    if(mode === 'rating'){
       const sorted = filmsArray.sort(sortByRating);
       this.#renderFilmsList(sorted);
     }
-    if(mode === 3){
+    if(mode === 'default'){
       this.#renderFilmsList(this.#defaultPageFilms);
     }
   };
 
   #sortByDefault = () => {
+    this.#popupSection.deleteFilmDetailsSection();
     this.#clearFilms();
     this.filmsRenderMode(this.#pageFilms, sortModes.default);
   };
 
   #sortByDate = () => {
+    this.#popupSection.deleteFilmDetailsSection();
     this.#clearFilms();
     this.filmsRenderMode(this.#pageFilms, sortModes.date);
   };
 
   #sortByRating = () => {
+    this.#popupSection.deleteFilmDetailsSection();
     this.#clearFilms();
     this.filmsRenderMode(this.#pageFilms, sortModes.rating);
   };
