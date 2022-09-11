@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 const createSortButtonsTemplate = () => (
   `<ul class="sort">
-     <li><a href="#" class="sort__button sort__button--default">Sort by default</a></li>
+     <li><a href="#" class="sort__button sort__button--default sort__button--active">Sort by default</a></li>
      <li><a href="#" class="sort__button sort__button--date">Sort by date</a></li>
      <li><a href="#" class="sort__button sort__button--rating">Sort by rating</a></li>
   </ul>`
@@ -18,10 +18,12 @@ export default class SortButtonsView extends AbstractView{
   };
 
   #sortByDefaultClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.defaultClick();
-    this.#clearFilterView();
-    this.element.querySelector('.sort__button--default').classList.add('sort__button--active');
+    if (this.element.querySelector('.sort__button--default').classList.contains('sort__button--active') === false){
+      evt.preventDefault();
+      this._callback.defaultClick();
+      this.#clearFilterView();
+      this.element.querySelector('.sort__button--default').classList.add('sort__button--active');
+    }
   };
 
   setDefaultClickHandler = (callback) => {
@@ -30,10 +32,12 @@ export default class SortButtonsView extends AbstractView{
   };
 
   #sortByDateClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.dateClick();
-    this.#clearFilterView();
-    this.element.querySelector('.sort__button--date').classList.add('sort__button--active');
+    if (this.element.querySelector('.sort__button--date').classList.contains('sort__button--active') === false){
+      evt.preventDefault();
+      this._callback.dateClick();
+      this.#clearFilterView();
+      this.element.querySelector('.sort__button--date').classList.add('sort__button--active');
+    }
   };
 
   setDateClickHandler = (callback) => {
@@ -42,14 +46,31 @@ export default class SortButtonsView extends AbstractView{
   };
 
   #sortByRatingClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.ratingClick();
-    this.#clearFilterView();
-    this.element.querySelector('.sort__button--rating').classList.add('sort__button--active');
+    if (this.element.querySelector('.sort__button--rating').classList.contains('sort__button--active') === false){
+      evt.preventDefault();
+      this._callback.ratingClick();
+      this.#clearFilterView();
+      this.element.querySelector('.sort__button--rating').classList.add('sort__button--active');
+    }
   };
 
   setRatingClickHandler = (callback) => {
     this._callback.ratingClick = callback;
     this.element.querySelector('.sort__button--rating').addEventListener('click', this.#sortByRatingClickHandler);
+  };
+
+  deleteDefaultClickHandler = (callback) => {
+    this._callback.defaultClick = callback;
+    this.element.querySelector('.sort__button--default').removeEventListener('click', this.#sortByDefaultClickHandler);
+  };
+
+  deleteDateClickHandler = (callback) => {
+    this._callback.dateClick = callback;
+    this.element.querySelector('.sort__button--date').removeEventListener('click', this.#sortByDateClickHandler);
+  };
+
+  deleteRatingClickHandler = (callback) => {
+    this._callback.ratingClick = callback;
+    this.element.querySelector('.sort__button--rating').removeEventListener('click', this.#sortByRatingClickHandler);
   };
 }

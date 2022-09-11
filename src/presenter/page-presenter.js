@@ -9,6 +9,8 @@ import ShowMoreButtonView from '../view/show-more-view.js';
 import FilmsListView from '../view/film-list-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 
+import FilmsDetailsView from '../view/film-details-section-view.js';
+
 import UserProfileView from '../view/header-profile-view.js';
 import FooterStatisticView from '../view/footer-statistics-view.js';
 
@@ -18,11 +20,12 @@ import {updateItem, sortByDate, sortByRating} from '../utils/common.js';
 import {generateFilter} from '../mock/films-navigation.js';
 
 const FILMS_PER_CLICK = 5;
+const CARD_MODE = 'CARD';
 
 const sortModes = {
-  default: 3,
-  date: 1,
-  rating: 2,
+  default: 'default',
+  date: 'date',
+  rating: 'rating',
 };
 
 export default class PagePresenter {
@@ -36,6 +39,8 @@ export default class PagePresenter {
   #filmListContainerComponent = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
   #navigationButtonsComponent = new SortButtonsView();
+
+  #popupSection = new FilmsDetailsView();
 
   #pageFilms = [];
   #defaultPageFilms = [];
@@ -68,6 +73,7 @@ export default class PagePresenter {
       'filmDataChange':this.#handleFilmDataChange,
       'pageModeChange':this.#handleModeChange,
       'pageContainer':this.#pageContainer,
+      'sortButtonsHandler':this.#sortButtonsHandler,
     };
 
     const filmPresenter = new FilmPresenter(filmPresenterArguments);
@@ -145,38 +151,50 @@ export default class PagePresenter {
   };
 
   #renderSortButtons = () => {
-    this.#navigationButtonsComponent.setDateClickHandler(this.#sortByDate);
-    this.#navigationButtonsComponent.setDefaultClickHandler(this.#sortByDefault);
-    this.#navigationButtonsComponent.setRatingClickHandler(this.#sortByRating);
+    this.#sortButtonsHandler(CARD_MODE);
     render(this.#navigationButtonsComponent, this.#pageContainer);
   };
 
   #renderPage = (filmsArray) => {
-    if(filmsArray.every((card) => card.isArchive)){
+    if(filmsArray.length === 0){
 
       this.#emptyFilmsList();
 
+    } else {
+
+      this.#renderUserProfile();
+      this.#renderFooterStatistic();
+      this.#renderNavigationButtons();
+      this.#renderSortButtons();
+
+      this.#renderFilmsList(filmsArray);
     }
+  };
 
-    this.#renderUserProfile();
-    this.#renderFooterStatistic();
-    this.#renderNavigationButtons();
-    this.#renderSortButtons();
+  #sortButtonsHandler = (mode) => {
 
-    this.#renderFilmsList(filmsArray);
-
+    if(mode === 'CARD'){
+      this.#navigationButtonsComponent.setDateClickHandler(this.#sortByDate);
+      this.#navigationButtonsComponent.setDefaultClickHandler(this.#sortByDefault);
+      this.#navigationButtonsComponent.setRatingClickHandler(this.#sortByRating);
+    }
+    if(mode === 'POPUP'){
+      this.#navigationButtonsComponent.deleteDateClickHandler(this.#sortByDate);
+      this.#navigationButtonsComponent.deleteDefaultClickHandler(this.#sortByDefault);
+      this.#navigationButtonsComponent.deleteRatingClickHandler(this.#sortByRating);
+    }
   };
 
   filmsRenderMode = (filmsArray, mode) => {
-    if(mode === 1){
+    if(mode === 'date'){
       const sorted = filmsArray.sort(sortByDate);
       this.#renderFilmsList(sorted);
     }
-    if(mode === 2){
+    if(mode === 'rating'){
       const sorted = filmsArray.sort(sortByRating);
       this.#renderFilmsList(sorted);
     }
-    if(mode === 3){
+    if(mode === 'default'){
       this.#renderFilmsList(this.#defaultPageFilms);
     }
   };
