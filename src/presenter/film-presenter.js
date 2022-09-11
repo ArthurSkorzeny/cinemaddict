@@ -10,7 +10,6 @@ import FilmPopupView from '../view/film-details-top-container-view.js';
 import FilmDetailsBottomContainerView from '../view/film-details-bottom-container-view.js.js';
 import FilmDetailsCommentsWrapView from '../view/film-details-comments-wrap-view.js';
 import FilmDetailsCommentsListView from '../view/popup-comments-list-view.js';
-//import FilmCommentView from '../view/popup-comment-view.js';
 
 const Mode = {
   CARD: 'CARD',
@@ -22,6 +21,7 @@ export default class FilmPresenter {
   #pageContainer = null;
   #changeData = null;
   #changeMode = null;
+  #sortButtonsHandler = null;
 
   #card = null;
   #mode = Mode.CARD;
@@ -35,13 +35,13 @@ export default class FilmPresenter {
   #popupBottomContainer = null;
   #popupCommentsWrap = null;
   #popupCommentsList = null;
-  //#popupComment = null;
 
-  constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer}) {
+  constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer, sortButtonsHandler}) {
     this.#filmListContainer = filmlistContainer;
     this.#changeData = filmDataChange;
     this.#changeMode = pageModeChange;
     this.#pageContainer = pageContainer;
+    this.#sortButtonsHandler = sortButtonsHandler;
   }
 
   init = (card) => {
@@ -59,36 +59,32 @@ export default class FilmPresenter {
     this.#popupBottomContainer = new FilmDetailsBottomContainerView();
     this.#popupCommentsWrap = new FilmDetailsCommentsWrapView;
     this.#popupCommentsList = new FilmDetailsCommentsListView();
-    //this.#popupComment = new FilmCommentView();
 
-    this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#popupComponent.setWatchlistClickHandler(this.#handleWatchListClick);
-    this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
+    this.#popupButtonsHandler();
 
     if (prevFilmCardComponent === null){
       render(this.#filmCardComponent, this.#filmListContainer);
-      this.#filmCardComponent.setClickHandler(this.#handleOpenClick);
+      this.#cardButtonsHandler();
       return;
     } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);
-      this.#filmCardComponent.setClickHandler(this.#handleOpenClick);
+      this.#cardButtonsHandler();
       remove(prevFilmCardComponent);
     }
 
     if (prevFilmPopupComponent === null){
       render(this.#popupComponent, this.#pageContainer);
       return;
-    } else {
+    } else if (this.#mode === Mode.POPUP){
       replace(this.#popupComponent, prevFilmPopupComponent);
       this.#popupSection.deleteFilmDetailsSection();
-      //document.querySelector('.film-details').remove();
       this.#handleOpenClick();
       remove(prevFilmPopupComponent);
     }
   };
 
   resetView = () => {
-    if (this.#mode !== Mode.CARD){
+    if (this.#mode === Mode.POPUP){
       this.#closePopup();
     }
   };
@@ -114,6 +110,7 @@ export default class FilmPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.deleteClickHandler(this.#closePopup);
     this.#mode = Mode.CARD;
+    this.#sortButtonsHandler(this.#mode);
   };
 
   #escKeyDownHandler = (evt) => {
@@ -130,6 +127,7 @@ export default class FilmPresenter {
     this.#openPopup();
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.setClickHandler(this.#closePopup);
+    this.#sortButtonsHandler(this.#mode);
   };
 
   #handleFavoriteClick = () => {
@@ -160,5 +158,18 @@ export default class FilmPresenter {
         alreadyWatched: !this.#card.userDetails.alreadyWatched
       }
     });
+  };
+
+  #cardButtonsHandler = () => {
+    this.#filmCardComponent.setClickHandler(this.#handleOpenClick);
+    this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
+    this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchListClick);
+  };
+
+  #popupButtonsHandler = () => {
+    this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#popupComponent.setWatchlistClickHandler(this.#handleWatchListClick);
+    this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
   };
 }

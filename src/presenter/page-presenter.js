@@ -72,6 +72,7 @@ export default class PagePresenter {
       'filmDataChange':this.#handleFilmDataChange,
       'pageModeChange':this.#handleModeChange,
       'pageContainer':this.#pageContainer,
+      'sortButtonsHandler':this.#sortButtonsHandler,
     };
 
     const filmPresenter = new FilmPresenter(filmPresenterArguments);
@@ -149,26 +150,38 @@ export default class PagePresenter {
   };
 
   #renderSortButtons = () => {
-    this.#navigationButtonsComponent.setDateClickHandler(this.#sortByDate);
-    this.#navigationButtonsComponent.setDefaultClickHandler(this.#sortByDefault);
-    this.#navigationButtonsComponent.setRatingClickHandler(this.#sortByRating);
+    this.#sortButtonsHandler('CARD');
     render(this.#navigationButtonsComponent, this.#pageContainer);
   };
 
   #renderPage = (filmsArray) => {
-    if(filmsArray.every((card) => card.isArchive)){
+    if(filmsArray.length === 0){
 
       this.#emptyFilmsList();
 
+    } else {
+
+      this.#renderUserProfile();
+      this.#renderFooterStatistic();
+      this.#renderNavigationButtons();
+      this.#renderSortButtons();
+
+      this.#renderFilmsList(filmsArray);
     }
+  };
 
-    this.#renderUserProfile();
-    this.#renderFooterStatistic();
-    this.#renderNavigationButtons();
-    this.#renderSortButtons();
+  #sortButtonsHandler = (mode) => {
 
-    this.#renderFilmsList(filmsArray);
-
+    if(mode === 'CARD'){
+      this.#navigationButtonsComponent.setDateClickHandler(this.#sortByDate);
+      this.#navigationButtonsComponent.setDefaultClickHandler(this.#sortByDefault);
+      this.#navigationButtonsComponent.setRatingClickHandler(this.#sortByRating);
+    }
+    if(mode === 'POPUP'){
+      this.#navigationButtonsComponent.deleteDateClickHandler(this.#sortByDate);
+      this.#navigationButtonsComponent.deleteDefaultClickHandler(this.#sortByDefault);
+      this.#navigationButtonsComponent.deleteRatingClickHandler(this.#sortByRating);
+    }
   };
 
   filmsRenderMode = (filmsArray, mode) => {
@@ -186,19 +199,16 @@ export default class PagePresenter {
   };
 
   #sortByDefault = () => {
-    this.#popupSection.deleteFilmDetailsSection();
     this.#clearFilms();
     this.filmsRenderMode(this.#pageFilms, sortModes.default);
   };
 
   #sortByDate = () => {
-    this.#popupSection.deleteFilmDetailsSection();
     this.#clearFilms();
     this.filmsRenderMode(this.#pageFilms, sortModes.date);
   };
 
   #sortByRating = () => {
-    this.#popupSection.deleteFilmDetailsSection();
     this.#clearFilms();
     this.filmsRenderMode(this.#pageFilms, sortModes.rating);
   };
