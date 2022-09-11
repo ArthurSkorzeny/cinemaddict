@@ -20,6 +20,7 @@ import {updateItem, sortByDate, sortByRating} from '../utils/common.js';
 import {generateFilter} from '../mock/films-navigation.js';
 
 const FILMS_PER_CLICK = 5;
+const CARD_MODE = 'CARD';
 
 const sortModes = {
   default: 'default',
@@ -150,7 +151,7 @@ export default class PagePresenter {
   };
 
   #renderSortButtons = () => {
-    this.#sortButtonsHandler('CARD');
+    this.#sortButtonsHandler(CARD_MODE);
     render(this.#navigationButtonsComponent, this.#pageContainer);
   };
 
