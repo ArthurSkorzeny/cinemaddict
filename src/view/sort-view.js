@@ -18,7 +18,8 @@ export default class SortButtonsView extends AbstractView{
   };
 
   #sortByDefaultClickHandler = (evt) => {
-    if (this.element.querySelector('.sort__button--default').classList.contains('sort__button--active') === false){
+    const isSortButtonActive = this.element.querySelector('.sort__button--default').classList.contains('sort__button--active');
+    if (!isSortButtonActive){
       evt.preventDefault();
       this._callback.defaultClick();
       this.#clearFilterView();
@@ -32,7 +33,8 @@ export default class SortButtonsView extends AbstractView{
   };
 
   #sortByDateClickHandler = (evt) => {
-    if (this.element.querySelector('.sort__button--date').classList.contains('sort__button--active') === false){
+    const isSortButtonActive = this.element.querySelector('.sort__button--date').classList.contains('sort__button--active');
+    if (!isSortButtonActive){
       evt.preventDefault();
       this._callback.dateClick();
       this.#clearFilterView();
@@ -46,7 +48,8 @@ export default class SortButtonsView extends AbstractView{
   };
 
   #sortByRatingClickHandler = (evt) => {
-    if (this.element.querySelector('.sort__button--rating').classList.contains('sort__button--active') === false){
+    const isSortButtonActive = this.element.querySelector('.sort__button--rating').classList.contains('sort__button--active');
+    if (!isSortButtonActive){
       evt.preventDefault();
       this._callback.ratingClick();
       this.#clearFilterView();

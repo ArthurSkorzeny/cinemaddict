@@ -75,7 +75,8 @@ export default class FilmPresenter {
     if (prevFilmPopupComponent === null){
       render(this.#popupComponent, this.#pageContainer);
       return;
-    } else if (this.#mode === Mode.POPUP){
+    }
+    if (this.#mode === Mode.POPUP){
       replace(this.#popupComponent, prevFilmPopupComponent);
       this.#popupSection.deleteFilmDetailsSection();
       this.#handleOpenClick();
