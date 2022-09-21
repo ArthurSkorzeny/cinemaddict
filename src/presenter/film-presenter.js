@@ -10,6 +10,7 @@ import FilmPopupView from '../view/film-details-top-container-view.js';
 import FilmDetailsBottomContainerView from '../view/film-details-bottom-container-view.js.js';
 import FilmDetailsCommentsWrapView from '../view/film-details-comments-wrap-view.js';
 import FilmDetailsCommentsListView from '../view/popup-comments-list-view.js';
+import FilmDetailsNewCommentFormView from '../view/new-comment-form-view.js';
 
 const Mode = {
   CARD: 'CARD',
@@ -35,6 +36,7 @@ export default class FilmPresenter {
   #popupBottomContainer = null;
   #popupCommentsWrap = null;
   #popupCommentsList = null;
+  #popupNewCommentForm = null;
 
   constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer, sortButtonsHandler}) {
     this.#filmListContainer = filmlistContainer;
@@ -59,6 +61,7 @@ export default class FilmPresenter {
     this.#popupBottomContainer = new FilmDetailsBottomContainerView();
     this.#popupCommentsWrap = new FilmDetailsCommentsWrapView;
     this.#popupCommentsList = new FilmDetailsCommentsListView();
+    this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
 
     this.#popupButtonsHandler();
 
@@ -103,6 +106,7 @@ export default class FilmPresenter {
     render(this.#popupBottomContainer, this.#popupInner.element);
     render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
     render(this.#popupCommentsList, this.#popupCommentsWrap.element);
+    render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
   };
 
   #closePopup = () => {
