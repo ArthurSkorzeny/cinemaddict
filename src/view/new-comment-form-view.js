@@ -59,26 +59,33 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
   };
 
   #setInnerHandlers = () => {
+
     const emojiButtons = this.element.querySelectorAll('.film-details__emoji-item');
+
     emojiButtons.forEach((b) => {b.addEventListener('click',
       (e) => {
+
         let currentId = '';
         currentId = e.target.id;
-        if(currentId === COMMENT_VALUES['emoji-sleeping']){
+
+        if(currentId === Object.keys(COMMENT_VALUES)[1]){
           COMMENT_VALUES.currentEmoji = COMMENT_VALUES['emoji-sleeping'];
         }
-        if(currentId === COMMENT_VALUES['emoji-smile']){
+        if(currentId === Object.keys(COMMENT_VALUES)[0]){
           COMMENT_VALUES.currentEmoji = COMMENT_VALUES['emoji-smile'];
         }
-        if(currentId === COMMENT_VALUES['emoji-puke']){
+        if(currentId === Object.keys(COMMENT_VALUES)[2]){
           COMMENT_VALUES.currentEmoji = COMMENT_VALUES['emoji-puke'];
         }
-        if(currentId === COMMENT_VALUES['emoji-angry']){
+        if(currentId === Object.keys(COMMENT_VALUES)[3]){
           COMMENT_VALUES.currentEmoji = COMMENT_VALUES['emoji-angry'];
         }
+
         this.#rerenderElement();
+
         emojiButtons.forEach((elem) => {elem.removeAttribute('checked', '');});
         document.getElementById(currentId).setAttribute('checked', '');
+
       });
 
     this.element.querySelector('.film-details__comment-input')
