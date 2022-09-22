@@ -1,31 +1,23 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createNavigationButtonsTemplate = (filtersCount) => {
-  const {watchlist, history, favorites} = filtersCount;
-  /*const navigationValues = () => {
-    let navigationValue = 0;
-
-    document.querySelectorAll('.film-card__controls-item').forEach()
-  };*/
-  return (
-    `<nav class="main-navigation">
-       <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-       <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${watchlist}</span></a>
-       <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">${history}</span></a>
-       <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${favorites}</span></a>
-     </nav>`
-  );
-};
+const createNavigationButtonsTemplate = (marksCount) => (
+  `<nav class="main-navigation">
+     <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
+     <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${marksCount[0]}</span></a>
+     <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">${marksCount[1]}</span></a>
+     <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${marksCount[2]}</span></a>
+   </nav>`
+);
 
 export default class NavigationButtonsView extends AbstractView{
-  #filtersCount = null;
+  #marksCount = null;
 
-  constructor(filtersCount) {
+  constructor(marksCount) {
     super();
-    this.#filtersCount = filtersCount;
+    this.#marksCount = marksCount;
   }
 
   get template() {
-    return createNavigationButtonsTemplate(this.#filtersCount);
+    return createNavigationButtonsTemplate(this.#marksCount);
   }
 }

@@ -1,4 +1,4 @@
-import {render, remove} from '../framework/render.js';
+import {render, remove, replace} from '../framework/render.js';
 
 import FilmPresenter from './film-presenter.js';
 
@@ -17,8 +17,6 @@ import FooterStatisticView from '../view/footer-statistics-view.js';
 import EmptyFilmsListView from '../view/films-list-empty-view.js';
 import {updateItem, sortByDate, sortByRating} from '../utils/common.js';
 
-import {generateFilter} from '../mock/films-navigation.js';
-
 const FILMS_PER_CLICK = 5;
 const CARD_MODE = 'CARD';
 
@@ -33,6 +31,8 @@ export default class PagePresenter {
   #cardsModel = null;
   #headerContainer = null;
   #footerContainer = null;
+
+  #filterButtonsComponent = null;
 
   #filmsComponent = new FilmsView();
   #filmListComponent = new FilmsListView();
@@ -133,14 +133,44 @@ export default class PagePresenter {
   };
 
   #renderFooterStatistic = () => {
-    render(new FooterStatisticView(), this.#footerContainer);
+    render(new FooterStatisticView(this.#pageFilms.length), this.#footerContainer);
   };
 
-  //добавить отрисовку меток на фильмах, а не 0
-
   #renderNavigationButtons = () => {
-    const filtersCount = generateFilter();
-    render(new NavigationButtonsView(filtersCount), this.#pageContainer);
+    const prevFilmCardComponent = this.#filterButtonsComponent;
+    this.#filterButtonsComponent = new NavigationButtonsView(this.#findFilmsMarks());
+
+    if(prevFilmCardComponent === null){
+      render(this.#filterButtonsComponent, this.#pageContainer);
+    } else {
+      replace(this.#filterButtonsComponent, prevFilmCardComponent);
+    }
+  };
+
+  #findFilmsMarks = () => {
+    let watchList = 0;
+    let alreadyWatched = 0;
+    let favorite = 0;
+
+    this.#pageFilms.forEach((element) => {
+      if(element.userDetails.watchlist === false){
+        watchList = watchList + 1;
+      }
+    });
+
+    this.#pageFilms.forEach((element) => {
+      if(element.userDetails.alreadyWatched === false){
+        alreadyWatched = alreadyWatched + 1;
+      }
+    });
+
+    this.#pageFilms.forEach((element) => {
+      if(element.userDetails.favorite === false){
+        favorite = favorite + 1;
+      }
+    });
+
+    return [watchList, alreadyWatched, favorite];
   };
 
   #handleFilmDataChange = (updatedFilm) => {
@@ -148,6 +178,8 @@ export default class PagePresenter {
     this.#defaultPageFilms = updateItem(this.#defaultPageFilms, updatedFilm);
 
     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+
+    this.#renderNavigationButtons(this.#findFilmsMarks());
   };
 
   #renderSortButtons = () => {
@@ -186,15 +218,15 @@ export default class PagePresenter {
   };
 
   filmsRenderMode = (filmsArray, mode) => {
-    if(mode === 'date'){
+    if(mode === sortModes.date){
       const sorted = filmsArray.sort(sortByDate);
       this.#renderFilmsList(sorted);
     }
-    if(mode === 'rating'){
+    if(mode === sortModes.rating){
       const sorted = filmsArray.sort(sortByRating);
       this.#renderFilmsList(sorted);
     }
-    if(mode === 'default'){
+    if(mode === sortModes.default){
       this.#renderFilmsList(this.#defaultPageFilms);
     }
   };
