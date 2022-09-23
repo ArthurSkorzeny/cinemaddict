@@ -38,4 +38,28 @@ const sortByDate = (a, b) => (getYear(a.filmInfo.release.date) > getYear(b.filmI
 
 const sortByRating = (a, b) => (a.filmInfo.totalRating > b.filmInfo.totalRating) ? -1 : 1;
 
-export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, sortByDate, sortByRating};
+const getRuntimeFromMinutes = (valueFromServer) => {
+
+  if(valueFromServer <= 59){
+    return `${valueFromServer}m`;
+  }
+
+  if([60, 120, 180, 240, 300].includes(valueFromServer)){
+    return `${valueFromServer / 6 / 10}h`;
+  }
+
+  if(valueFromServer > 60){
+    let minutes = valueFromServer;
+    let hours = 0;
+
+    for (;;) {
+      if (minutes < 60) {break;}
+      hours = hours + 1;
+      minutes = minutes - 60;
+    }
+
+    return `${hours}h ${minutes}m`;
+  }
+};
+
+export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, sortByDate, sortByRating, getRuntimeFromMinutes};

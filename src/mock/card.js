@@ -1,4 +1,4 @@
-import {generateRandomPart, getRandomInteger, getRandomNumber} from '../utils/common';
+import {generateRandomPart, getRandomInteger, getRandomNumber, getRuntimeFromMinutes} from '../utils/common';
 import {nanoid} from 'nanoid';
 
 const posters = [
@@ -109,7 +109,7 @@ export const generateFilmCard = () => ({
       'date': `${getRandomInteger(1954, 2022)}-05-11T00:00:00.000Z`,
       'releaseCountry': generateRandomPart(countries)
     },
-    'runtime': getRandomInteger(60,134),
+    'runtime': getRuntimeFromMinutes(getRandomInteger(44,175)),
     'genre': [
       generateRandomPart(genres)
     ],
