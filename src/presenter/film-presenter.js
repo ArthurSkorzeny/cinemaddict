@@ -138,7 +138,9 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#scrollPosition = this.#popupComponent.getScrollPosition();
+    if(this.#mode === Mode.POPUP){
+      this.#scrollPosition = this.#popupComponent.getScrollPosition();
+    }
     this.#changeData({
       ...this.#card,
       userDetails: {
@@ -149,7 +151,9 @@ export default class FilmPresenter {
   };
 
   #handleWatchListClick = () => {
-    this.#scrollPosition = this.#popupComponent.getScrollPosition();
+    if(this.#mode === Mode.POPUP){
+      this.#scrollPosition = this.#popupComponent.getScrollPosition();
+    }
     this.#changeData({
       ...this.#card,
       userDetails: {
@@ -160,7 +164,9 @@ export default class FilmPresenter {
   };
 
   #handleWatchedClick = () => {
-    this.#scrollPosition = this.#popupComponent.getScrollPosition();
+    if(this.#mode === Mode.POPUP){
+      this.#scrollPosition = this.#popupComponent.getScrollPosition();
+    }
     this.#changeData({
       ...this.#card,
       userDetails: {
