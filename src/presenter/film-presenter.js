@@ -26,6 +26,7 @@ export default class FilmPresenter {
 
   #card = null;
   #mode = Mode.CARD;
+  #scrollPosition = null;
 
   #filmCardComponent = null;
 
@@ -80,9 +81,10 @@ export default class FilmPresenter {
       return;
     }
     if (this.#mode === Mode.POPUP){
-      replace(this.#popupComponent, prevFilmPopupComponent);
       this.#popupSection.deleteFilmDetailsSection();
+      replace(this.#popupComponent, prevFilmPopupComponent);
       this.#handleOpenClick();
+      this.#popupComponent.scrollToNedeedPosition(this.#scrollPosition);
       remove(prevFilmPopupComponent);
     }
   };
@@ -111,7 +113,7 @@ export default class FilmPresenter {
 
   #closePopup = () => {
     remove(this.#popupSection);
-    document.querySelector('body').classList.remove('hide-overflow');
+    this.#popupComponent.deleteHideOverFlowFromBody();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.deleteClickHandler(this.#closePopup);
     this.#mode = Mode.CARD;
@@ -136,6 +138,7 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
+    this.#scrollPosition = this.#popupComponent.getScrollPosition();
     this.#changeData({
       ...this.#card,
       userDetails: {
@@ -146,6 +149,7 @@ export default class FilmPresenter {
   };
 
   #handleWatchListClick = () => {
+    this.#scrollPosition = this.#popupComponent.getScrollPosition();
     this.#changeData({
       ...this.#card,
       userDetails: {
@@ -156,6 +160,7 @@ export default class FilmPresenter {
   };
 
   #handleWatchedClick = () => {
+    this.#scrollPosition = this.#popupComponent.getScrollPosition();
     this.#changeData({
       ...this.#card,
       userDetails: {

@@ -135,4 +135,10 @@ export default class FilmPopupView extends AbstractView{
     this._callback.watchListClick = callback;
     this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistClickHandler);
   };
+
+  getScrollPosition = () => document.querySelector('.film-details').scrollTop;
+
+  scrollToNedeedPosition = (position) => {document.querySelector('.film-details').scrollTop += position;};
+
+  deleteHideOverFlowFromBody = () => document.querySelector('body').removeAttribute('class', 'hide-overflow');
 }

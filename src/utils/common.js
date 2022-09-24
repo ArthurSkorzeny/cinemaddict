@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -40,7 +41,7 @@ const sortByRating = (a, b) => (a.filmInfo.totalRating > b.filmInfo.totalRating)
 
 const getRuntimeFromMinutes = (valueFromServer) => {
 
-  if(valueFromServer <= 59){
+  if(valueFromServer < 60){
     return `${valueFromServer}m`;
   }
 
@@ -49,16 +50,7 @@ const getRuntimeFromMinutes = (valueFromServer) => {
   }
 
   if(valueFromServer > 60){
-    let minutes = valueFromServer;
-    let hours = 0;
-
-    for (;;) {
-      if (minutes < 60) {break;}
-      hours = hours + 1;
-      minutes = minutes - 60;
-    }
-
-    return `${hours}h ${minutes}m`;
+    return `${parseInt(valueFromServer / 60)}h ${valueFromServer % 60}m`;
   }
 };
 

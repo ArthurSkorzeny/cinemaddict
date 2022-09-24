@@ -147,31 +147,29 @@ export default class PagePresenter {
     }
   };
 
-  #findFilmsMarks = () => {
-    let watchList = 0;
-    let alreadyWatched = 0;
-    let favorite = 0;
+  #findFilmsMarks = () =>
+    //при реальных данных поменять false на true
+    this.#pageFilms.reduce((marks, card) => {
 
-    this.#pageFilms.forEach((element) => {
-      if(element.userDetails.watchlist === false){
-        watchList = watchList + 1;
+      if(card.userDetails.watchlist === false){
+        marks.watchlist = marks.watchlist + 1;
       }
-    });
 
-    this.#pageFilms.forEach((element) => {
-      if(element.userDetails.alreadyWatched === false){
-        alreadyWatched = alreadyWatched + 1;
+      if(card.userDetails.alreadyWatched === false){
+        marks.alreadyWatched = marks.alreadyWatched + 1;
       }
-    });
 
-    this.#pageFilms.forEach((element) => {
-      if(element.userDetails.favorite === false){
-        favorite = favorite + 1;
+      if(card.userDetails.favorite === false){
+        marks.favorite = marks.favorite + 1;
       }
-    });
 
-    return [watchList, alreadyWatched, favorite];
-  };
+      return marks;
+    }, new Object({
+      watchlist: 0,
+      alreadyWatched: 0,
+      favorite: 0,
+    })
+    );
 
   #handleFilmDataChange = (updatedFilm) => {
     this.#pageFilms = updateItem(this.#pageFilms, updatedFilm);
@@ -218,17 +216,20 @@ export default class PagePresenter {
   };
 
   filmsRenderMode = (filmsArray, mode) => {
-    if(mode === sortModes.date){
-      const sorted = filmsArray.sort(sortByDate);
+    const sort = {
+      [sortModes.date]: sortByDate,
+      [sortModes.rating]: sortByRating,
+    };
+
+    const sortMode = sort[mode];
+
+    if (sortMode) {
+      const sorted = filmsArray.sort(sortMode);
       this.#renderFilmsList(sorted);
+      return;
     }
-    if(mode === sortModes.rating){
-      const sorted = filmsArray.sort(sortByRating);
-      this.#renderFilmsList(sorted);
-    }
-    if(mode === sortModes.default){
-      this.#renderFilmsList(this.#defaultPageFilms);
-    }
+
+    this.#renderFilmsList(this.#defaultPageFilms);
   };
 
   #sortByDefault = () => {
