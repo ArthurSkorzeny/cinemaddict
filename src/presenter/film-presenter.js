@@ -249,10 +249,6 @@ export default class FilmPresenter {
     this.#commentsModel.deleteComment(updateType, update);
     this.#commentsWrap = new FilmDetailsCommentsWrapView(this.#findCommentsLength());
 
-    this.#changeData(
-      UpdateType.MINOR,
-      this.#card);
-
     this.#clearCommentsInner();
     this.#renderCommentsInner();
   };
