@@ -1,4 +1,4 @@
-import PagePresenter from './presenter/films-presenter.js';
+import PagePresenter from './presenter/page-presenter.js';
 import CardsModel from './model/card-model.js';
 
 const siteHeaderElement = document.querySelector('.header');

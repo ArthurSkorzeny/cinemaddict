@@ -1,4 +1,5 @@
-import {generateRandomPart, getRandomInteger, getRandomNumber} from '../utils.js';
+import {generateRandomPart, getRandomInteger, getRandomNumber, getRuntimeFromMinutes} from '../utils/common';
+import {nanoid} from 'nanoid';
 
 const posters = [
   'made-for-each-other.png',
@@ -87,9 +88,10 @@ const ageRating = [
   '16+',
   '18+',
 ];
+
 export const generateFilmCard = () => ({
-  'id': getRandomInteger(1, 100),
-  'comments': Array.from({length: getRandomInteger(2, 45)}, () => Math.floor(Math.random() * getRandomInteger(2, 45))),
+  'id': nanoid(),
+  'comments': Array.from({length: getRandomInteger(1, 12)}, () => Math.floor(Math.random() * getRandomInteger(2, 24))),
   'filmInfo': {
     'title': generateRandomPart(titles),
     'alternativeTitle': generateRandomPart(titles),
@@ -107,16 +109,16 @@ export const generateFilmCard = () => ({
       'date': `${getRandomInteger(1954, 2022)}-05-11T00:00:00.000Z`,
       'releaseCountry': generateRandomPart(countries)
     },
-    'runtime': getRandomInteger(60,134),
+    'runtime': getRuntimeFromMinutes(getRandomInteger(44,175)),
     'genre': [
       generateRandomPart(genres)
     ],
     'description': generateRandomPart(descriptions)
   },
   'userDetails': {
-    'watchlist': Boolean(getRandomInteger(0, 1)),
-    'alreadyWatched': Boolean(getRandomInteger(0, 1)),
+    'watchlist': Boolean(getRandomInteger(0,4)),
+    'alreadyWatched': Boolean(getRandomInteger(0,4)),
     'watchingDate': `${getRandomInteger(2019, 2022)}-04-12T16:12:32.554Z`,
-    'favorite': Boolean(getRandomInteger(0, 1))
+    'favorite': Boolean(getRandomInteger(0,4))
   }
 });
