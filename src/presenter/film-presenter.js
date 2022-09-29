@@ -1,5 +1,10 @@
 /* eslint-disable no-useless-return */
 import {render, replace, remove} from '../framework/render.js';
+import {UpdateType} from '../const.js';
+
+import CommentPresenter from './comments-presenter.js';
+
+import CommentsModel from '../model/comments-model.js';
 
 import FilmCardView from '../view/film-card-view.js';
 
@@ -38,6 +43,10 @@ export default class FilmPresenter {
   #popupCommentsWrap = null;
   #popupCommentsList = null;
   #popupNewCommentForm = null;
+  #commentsModel = null;
+  #commentsWrap = null;
+
+  #commentPresenter = new Map();
 
   constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer, sortButtonsHandler}) {
     this.#filmListContainer = filmlistContainer;
@@ -53,15 +62,15 @@ export default class FilmPresenter {
     const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopupComponent = this.#popupComponent;
 
-    this.#filmCardComponent = new FilmCardView(this.#card);
+    this.#commentsModel = new CommentsModel();
+
+    this.#filmCardComponent = new FilmCardView(this.#card, this.#findCommentsLength());
 
     this.#popupSection = new FilmsDetailsView();
-    this.#popupInner = new FilmDeatilsInnerView;
+    this.#popupInner = new FilmDeatilsInnerView();
     this.#popupComponent = new FilmPopupView(this.#card);
 
     this.#popupBottomContainer = new FilmDetailsBottomContainerView();
-    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView;
-    this.#popupCommentsList = new FilmDetailsCommentsListView();
     this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
 
     this.#popupButtonsHandler();
@@ -105,14 +114,12 @@ export default class FilmPresenter {
     render(this.#popupInner, this.#popupSection.element);
     render(this.#popupComponent, this.#popupInner.element);
 
-    render(this.#popupBottomContainer, this.#popupInner.element);
-    render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
-    render(this.#popupCommentsList, this.#popupCommentsWrap.element);
-    render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
+    this.#renderCommentsInner();
   };
 
   #closePopup = () => {
     remove(this.#popupSection);
+    this.#clearCommentsInner();
     this.#popupComponent.deleteHideOverFlowFromBody();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.deleteClickHandler(this.#closePopup);
@@ -141,39 +148,48 @@ export default class FilmPresenter {
     if(this.#mode === Mode.POPUP){
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
-    this.#changeData({
-      ...this.#card,
-      userDetails: {
-        ...this.#card.userDetails,
-        favorite: !this.#card.userDetails.favorite
-      }
-    });
+
+    this.#changeData(
+      UpdateType.MINOR,
+      {
+        ...this.#card,
+        userDetails: {
+          ...this.#card.userDetails,
+          favorite: !this.#card.userDetails.favorite
+        }
+      });
   };
 
   #handleWatchListClick = () => {
     if(this.#mode === Mode.POPUP){
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
-    this.#changeData({
-      ...this.#card,
-      userDetails: {
-        ...this.#card.userDetails,
-        watchlist: !this.#card.userDetails.watchlist
-      }
-    });
+
+    this.#changeData(
+      UpdateType.MINOR,
+      {
+        ...this.#card,
+        userDetails: {
+          ...this.#card.userDetails,
+          watchlist: !this.#card.userDetails.watchlist
+        }
+      });
   };
 
   #handleWatchedClick = () => {
     if(this.#mode === Mode.POPUP){
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
-    this.#changeData({
-      ...this.#card,
-      userDetails: {
-        ...this.#card.userDetails,
-        alreadyWatched: !this.#card.userDetails.alreadyWatched
-      }
-    });
+
+    this.#changeData(
+      UpdateType.MINOR,
+      {
+        ...this.#card,
+        userDetails: {
+          ...this.#card.userDetails,
+          alreadyWatched: !this.#card.userDetails.alreadyWatched
+        }
+      });
   };
 
   #cardButtonsHandler = () => {
@@ -187,5 +203,72 @@ export default class FilmPresenter {
     this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#popupComponent.setWatchlistClickHandler(this.#handleWatchListClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
+  };
+
+  #findCommentsLength = () => {
+    let commentsLength = 0;
+
+    for(let i = 0; i < this.#commentsModel.comments.length; i++){
+      if(this.#card.comments.includes(this.#commentsModel.comments[i].id)){
+        commentsLength = commentsLength + 1;
+      }
+    }
+
+    return commentsLength;
+  };
+
+  #findComments = () => {
+    const commentsList = [];
+
+    for(let i = 0; i < this.#commentsModel.comments.length; i++){
+      if(this.#card.comments.includes(this.#commentsModel.comments[i].id)){
+        commentsList.push(this.#commentsModel.comments[i]);
+      }
+    }
+
+    return commentsList;
+  };
+
+  #renderComment = (comment) => {
+    const commentPresenterArguments = {
+      'commentlistContainer':this.#popupCommentsList.element,
+      'card':this.#card,
+      'deleteCommentHandler':this.#deleteCommentHandler,
+    };
+
+    const commentPresenter = new CommentPresenter(commentPresenterArguments);
+    commentPresenter.init(comment);
+    this.#commentPresenter.set(comment.id, commentPresenter);
+  };
+
+  #renderComments = (comments) => {
+    comments.forEach((comment) => this.#renderComment(comment));
+  };
+
+  #deleteCommentHandler = (updateType, update) => {
+    this.#commentsModel.deleteComment(updateType, update);
+    this.#commentsWrap = new FilmDetailsCommentsWrapView(this.#findCommentsLength());
+
+    this.#changeData(
+      UpdateType.MINOR,
+      this.#card);
+
+    this.#clearCommentsInner();
+    this.#renderCommentsInner();
+  };
+
+  #renderCommentsInner = () => {
+    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.#findCommentsLength());
+    this.#popupCommentsList = new FilmDetailsCommentsListView();
+
+    render(this.#popupBottomContainer, this.#popupInner.element);
+    render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
+    render(this.#popupCommentsList, this.#popupCommentsWrap.element);
+    this.#renderComments(this.#findComments());
+    render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
+  };
+
+  #clearCommentsInner = () => {
+    remove(this.#popupBottomContainer);
   };
 }

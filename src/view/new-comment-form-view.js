@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import he from 'he';
 
 let currentText = 'Great movie!';
 let currentEmoji = 'images/emoji/smile.png';
@@ -10,7 +11,7 @@ const createCommentFormTemplate = () => (
      </div>
 
      <label class="film-details__comment-label">
-       <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${currentText}</textarea>
+       <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(currentText)}</textarea>
      </label>
 
      <div class="film-details__emoji-list">

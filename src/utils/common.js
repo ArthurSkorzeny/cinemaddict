@@ -21,20 +21,6 @@ const generateRandomPart = (array) => {
   return array[randomIndex];
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 const sortByDate = (a, b) => (getYear(a.filmInfo.release.date) > getYear(b.filmInfo.release.date)) ? -1 : 1;
 
 const sortByRating = (a, b) => (a.filmInfo.totalRating > b.filmInfo.totalRating) ? -1 : 1;
@@ -54,4 +40,4 @@ const getRuntimeFromMinutes = (valueFromServer) => {
   }
 };
 
-export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, sortByDate, sortByRating, getRuntimeFromMinutes};
+export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, sortByDate, sortByRating, getRuntimeFromMinutes};
