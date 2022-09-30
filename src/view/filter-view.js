@@ -1,13 +1,20 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const filterModes = {
-  all: 'all',
-  watchlist: 'watchlist',
-  history: 'history',
-  favorites: 'favorites',
+const FilterValues = {
+  'ALL': '.main-navigation__item--all',
+  'WATCHLIST': '.main-navigation__item--watchlist',
+  'HISTORY': '.main-navigation__item--history',
+  'FAVORITES': '.main-navigation__item--favorites',
 };
 
-let currentFilter = 'all';
+const FILTER_MODES = {
+  all: 'ALL',
+  watchlist: 'WATCHLIST',
+  history: 'HISTORY',
+  favorites: 'FAVORITES',
+};
+
+let currentFilter = 'ALL';
 
 const createFilterButtonsTemplate = (marksCount) => {
   const {watchlist, alreadyWatched, favorite} = marksCount;
@@ -36,16 +43,9 @@ export default class FilterButtonsView extends AbstractView{
   }
 
   #replaceWithCurrentFilter = () => {
-    const FILTER_VALUES = {
-      'all': '.main-navigation__item--all',
-      'watchlist': '.main-navigation__item--watchlist',
-      'history': '.main-navigation__item--history',
-      'favorites': '.main-navigation__item--favorites',
-    };
-
     this.#clearFilterView();
 
-    this.element.querySelector(FILTER_VALUES[currentFilter]).classList.add('main-navigation__item--active');
+    this.element.querySelector(FilterValues[currentFilter]).classList.add('main-navigation__item--active');
   };
 
   #clearFilterView = () => {
@@ -59,7 +59,7 @@ export default class FilterButtonsView extends AbstractView{
       this._callback.allClick();
       this.#clearFilterView();
       this.element.querySelector('.main-navigation__item--all').classList.add('main-navigation__item--active');
-      currentFilter = filterModes.all;
+      currentFilter = FILTER_MODES.all;
     }
   };
 
@@ -75,7 +75,7 @@ export default class FilterButtonsView extends AbstractView{
       this._callback.watchListClick();
       this.#clearFilterView();
       this.element.querySelector('.main-navigation__item--watchlist').classList.add('main-navigation__item--active');
-      currentFilter = filterModes.watchlist;
+      currentFilter = FILTER_MODES.watchlist;
     }
   };
 
@@ -91,7 +91,7 @@ export default class FilterButtonsView extends AbstractView{
       this._callback.alreadyWatchedClick();
       this.#clearFilterView();
       this.element.querySelector('.main-navigation__item--history').classList.add('main-navigation__item--active');
-      currentFilter = filterModes.history;
+      currentFilter = FILTER_MODES.history;
     }
   };
 
@@ -107,7 +107,7 @@ export default class FilterButtonsView extends AbstractView{
       this._callback.favoriteClick();
       this.#clearFilterView();
       this.element.querySelector('.main-navigation__item--favorites').classList.add('main-navigation__item--active');
-      currentFilter = filterModes.favorites;
+      currentFilter = FILTER_MODES.favorites;
     }
   };
 

@@ -45,6 +45,7 @@ export default class FilmPresenter {
   #popupNewCommentForm = null;
   #commentsModel = null;
   #commentsWrap = null;
+  #cardComments = null;
 
   #commentPresenter = new Map();
 
@@ -64,7 +65,7 @@ export default class FilmPresenter {
 
     this.#commentsModel = new CommentsModel();
 
-    this.#filmCardComponent = new FilmCardView(this.#card, this.#findCommentsLength());
+    this.#filmCardComponent = new FilmCardView(this.#card, this.#findComments().length);
 
     this.#popupSection = new FilmsDetailsView();
     this.#popupInner = new FilmDeatilsInnerView();
@@ -205,18 +206,6 @@ export default class FilmPresenter {
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
   };
 
-  #findCommentsLength = () => {
-    let commentsLength = 0;
-
-    for(let i = 0; i < this.#commentsModel.comments.length; i++){
-      if(this.#card.comments.includes(this.#commentsModel.comments[i].id)){
-        commentsLength = commentsLength + 1;
-      }
-    }
-
-    return commentsLength;
-  };
-
   #findComments = () => {
     const commentsList = [];
 
@@ -247,14 +236,17 @@ export default class FilmPresenter {
 
   #deleteCommentHandler = (updateType, update) => {
     this.#commentsModel.deleteComment(updateType, update);
-    this.#commentsWrap = new FilmDetailsCommentsWrapView(this.#findCommentsLength());
+    this.#commentsWrap = new FilmDetailsCommentsWrapView(this.#findComments().length);
+
+    //убирать id коммента из карточки
+
 
     this.#clearCommentsInner();
     this.#renderCommentsInner();
   };
 
   #renderCommentsInner = () => {
-    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.#findCommentsLength());
+    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.#findComments().length);
     this.#popupCommentsList = new FilmDetailsCommentsListView();
 
     render(this.#popupBottomContainer, this.#popupInner.element);
@@ -266,5 +258,22 @@ export default class FilmPresenter {
 
   #clearCommentsInner = () => {
     remove(this.#popupBottomContainer);
+  };
+
+  #renderCard = () => {
+    const prevFilmCardComponent = this.#filmCardComponent;
+    this.#filmCardComponent = new FilmCardView(this.#card, this.#findComments().length);
+
+
+    if (prevFilmCardComponent === null){
+      render(this.#filmCardComponent, this.#filmListContainer);
+      this.#cardButtonsHandler();
+      return;
+    } else {
+      replace(this.#filmCardComponent, prevFilmCardComponent);
+      this.#cardButtonsHandler();
+      remove(prevFilmCardComponent);
+    }
+
   };
 }

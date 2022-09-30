@@ -1,5 +1,13 @@
+/* eslint-disable no-alert */
 import AbstractView from '../framework/view/abstract-view.js';
 import he from 'he';
+
+const CommentValues = {
+  'emoji-smile': 'images/emoji/smile.png',
+  'emoji-sleeping': 'images/emoji/sleeping.png',
+  'emoji-puke': 'images/emoji/puke.png',
+  'emoji-angry': 'images/emoji/angry.png',
+};
 
 let currentText = 'Great movie!';
 let currentEmoji = 'images/emoji/smile.png';
@@ -58,19 +66,11 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
     const emojiButtons = this.element.querySelectorAll('.film-details__emoji-item');
 
     emojiButtons.forEach((b) => {b.addEventListener('click',
-      (e) => {
-
-        const COMMENT_VALUES = {
-          'emoji-smile': 'images/emoji/smile.png',
-          'emoji-sleeping': 'images/emoji/sleeping.png',
-          'emoji-puke': 'images/emoji/puke.png',
-          'emoji-angry': 'images/emoji/angry.png',
-        };
-
+      (evt) => {
         let currentId = '';
-        currentId = e.target.id;
+        currentId = evt.target.id;
 
-        currentEmoji = COMMENT_VALUES[currentId];
+        currentEmoji = CommentValues[currentId];
 
         this.#rerenderElement();
 
@@ -81,6 +81,13 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
 
     this.element.querySelector('.film-details__comment-input')
       .addEventListener('input', this.#commentInputHandler);
+    });
+
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', (evt)=> {
+      if (evt.key === 'Enter') {
+        evt.preventDefault();
+        alert('отправлено');
+      }
     });
   };
 

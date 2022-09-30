@@ -18,11 +18,9 @@ const createEmptyFilterFilmListTemplate = (filter) => {
   };
 
   return(
-    `
-    <section class="films-list">
+    `<section class="films-list">
       <h2 class="films-list__title">${currentFilter()}</h2>
-    </section>
-    `
+     </section>`
   );
 };
 

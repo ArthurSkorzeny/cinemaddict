@@ -26,7 +26,7 @@ const emoji = [
 ];
 
 export const generateComment = () => ({
-  'id': getRandomInteger(1, 24),
+  'id': getRandomInteger(1, 3),
   'author': `${generateRandomPart(author)}`,
   'comment': `${generateRandomPart(comment)}`,
   'date': `${getRandomInteger(2018, 2022)}`,

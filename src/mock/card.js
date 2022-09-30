@@ -91,7 +91,7 @@ const ageRating = [
 
 export const generateFilmCard = () => ({
   'id': nanoid(),
-  'comments': Array.from({length: getRandomInteger(1, 12)}, () => Math.floor(Math.random() * getRandomInteger(2, 24))),
+  'comments': [1, 2, 3],
   'filmInfo': {
     'title': generateRandomPart(titles),
     'alternativeTitle': generateRandomPart(titles),

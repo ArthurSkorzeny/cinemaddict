@@ -59,9 +59,9 @@ export default class PagePresenter {
         return [...this.#cardsModel.cards].sort(sortByDate);
       case sortModes.rating:
         return [...this.#cardsModel.cards].sort(sortByRating);
+      default:
+        return this.#cardsModel.cards;
     }
-
-    return this.#cardsModel.cards;
   }
 
   init = () => {
@@ -108,10 +108,6 @@ export default class PagePresenter {
     let cards = null;
 
     switch (this.#currentFilterType) {
-      case filterModes.all:
-        cardsCount = this.cards.length;
-        cards = this.cards.slice(0, Math.min(cardsCount, FILMS_PER_CLICK));
-        break;
       case filterModes.watchlist:
         cards = this.cards.filter((item) => item.userDetails.watchlist === false);
         cardsCount = cards.length;
@@ -127,22 +123,17 @@ export default class PagePresenter {
         cardsCount = cards.length;
         cards = cards.slice(0, Math.min(cardsCount, FILMS_PER_CLICK));
         break;
+      default:
+        cardsCount = this.cards.length;
+        cards = this.cards.slice(0, Math.min(cardsCount, FILMS_PER_CLICK));
+        break;
     }
+
     remove(this.#emptyFilterFilmListComponent);
     render(this.#filmsComponent, this.#pageContainer);
     render(this.#filmListComponent, this.#filmsComponent.element);
 
-    if(this.#currentFilterType === filterModes.watchlist && cards.length === 0){
-      this.#emptyFilterFilmListComponent = new EmptyFilterFilmListView(this.#currentFilterType);
-      render(this.#emptyFilterFilmListComponent, this.#filmListComponent.element);
-    }
-
-    if(this.#currentFilterType === filterModes.history && cards.length === 0){
-      this.#emptyFilterFilmListComponent = new EmptyFilterFilmListView(this.#currentFilterType);
-      render(this.#emptyFilterFilmListComponent, this.#filmListComponent.element);
-    }
-
-    if(this.#currentFilterType === filterModes.favorites && cards.length === 0){
+    if(this.#currentFilterType !== filterModes.all && cards.length === 0){
       this.#emptyFilterFilmListComponent = new EmptyFilterFilmListView(this.#currentFilterType);
       render(this.#emptyFilterFilmListComponent, this.#filmListComponent.element);
     } else {
@@ -257,11 +248,11 @@ export default class PagePresenter {
       }
 
       return marks;
-    }, new Object({
+    }, {
       watchlist: 0,
       alreadyWatched: 0,
       favorite: 0,
-    })
+    }
     );
 
   //логика сортировки
