@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -20,27 +21,13 @@ const generateRandomPart = (array) => {
   return array[randomIndex];
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 const sortByDate = (a, b) => (getYear(a.filmInfo.release.date) > getYear(b.filmInfo.release.date)) ? -1 : 1;
 
 const sortByRating = (a, b) => (a.filmInfo.totalRating > b.filmInfo.totalRating) ? -1 : 1;
 
 const getRuntimeFromMinutes = (valueFromServer) => {
 
-  if(valueFromServer <= 59){
+  if(valueFromServer < 60){
     return `${valueFromServer}m`;
   }
 
@@ -49,17 +36,8 @@ const getRuntimeFromMinutes = (valueFromServer) => {
   }
 
   if(valueFromServer > 60){
-    let minutes = valueFromServer;
-    let hours = 0;
-
-    for (;;) {
-      if (minutes < 60) {break;}
-      hours = hours + 1;
-      minutes = minutes - 60;
-    }
-
-    return `${hours}h ${minutes}m`;
+    return `${parseInt(valueFromServer / 60)}h ${valueFromServer % 60}m`;
   }
 };
 
-export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, updateItem, sortByDate, sortByRating, getRuntimeFromMinutes};
+export {getRandomInteger, getYear, generateRandomPart, getRandomNumber, sortByDate, sortByRating, getRuntimeFromMinutes};

@@ -2,8 +2,8 @@ import AbstractView from '../framework/view/abstract-view.js';
 import {getYear} from '../utils/common';
 
 
-const createFilmCardTemplate = (card) => {
-  const {comments, filmInfo, userDetails} = card;
+const createFilmCardTemplate = (card, commentsLength) => {
+  const {filmInfo, userDetails} = card;
 
   const getFilterType = (filterValue) => filterValue === false ? 'film-card__controls-item--active' : '';
 
@@ -19,7 +19,7 @@ const createFilmCardTemplate = (card) => {
        </p>
        <img src="${filmInfo.poster}" alt="" class="film-card__poster">
        <p class="film-card__description">${filmInfo.description}</p>
-       <span class="film-card__comments">${comments.length}</span>
+       <span class="film-card__comments">${commentsLength}</span>
      </a>
      <div class="film-card__controls">
        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${getFilterType(userDetails.watchlist)}" type="button">Add to watchlist</button>
@@ -30,16 +30,19 @@ const createFilmCardTemplate = (card) => {
   );
 };
 
+
 export default class FilmCardView extends AbstractView{
   #card = null;
+  #commentsModel = null;
 
-  constructor(card) {
+  constructor(card, commentsModel) {
     super();
     this.#card = card;
+    this.#commentsModel = commentsModel;
   }
 
   get template() {
-    return createFilmCardTemplate(this.#card);
+    return createFilmCardTemplate(this.#card, this.#commentsModel);
   }
 
   setClickHandler = (callback) => {
