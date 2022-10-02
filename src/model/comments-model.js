@@ -1,10 +1,7 @@
 import Observable from '../framework/observable.js';
-import {generateComment} from '../mock/comment';
-
-const COMMENTS_LIST_LENGTH = 3;
 
 export default class CommentsModel extends Observable{
-  #comments = Array.from({length: COMMENTS_LIST_LENGTH}, generateComment);
+  #comments = [];
 
   get comments() {
     return this.#comments;

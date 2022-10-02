@@ -151,7 +151,7 @@ export default class FilmPresenter {
     }
 
     this.#changeData(
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {
         ...this.#card,
         userDetails: {
@@ -167,7 +167,7 @@ export default class FilmPresenter {
     }
 
     this.#changeData(
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {
         ...this.#card,
         userDetails: {
@@ -183,7 +183,7 @@ export default class FilmPresenter {
     }
 
     this.#changeData(
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {
         ...this.#card,
         userDetails: {

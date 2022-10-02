@@ -1,10 +1,22 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getYear} from '../utils/common';
+import {getYear, getRuntimeFromMinutes} from '../utils/common';
 
 const createFilmPopupTemplate = (card) => {
   const {filmInfo, userDetails} = card;
 
   const getFilterType = (filterValue) => filterValue === false ? 'film-details__control-button--active' : '';
+
+  const createGenresElement = (genres) => {
+
+    let text = '';
+
+    for(let i = 0; i <= genres.length - 1; i++){
+
+      text = `${text}<span class="film-details__genre">${genres[i]}</span>`;
+    }
+
+    return text;
+  };
 
   return (
     `<div class="film-details__top-container">
@@ -22,7 +34,7 @@ const createFilmPopupTemplate = (card) => {
         <div class="film-details__info-head">
           <div class="film-details__title-wrap">
             <h3 class="film-details__title">${filmInfo.title}</h3>
-            <p class="film-details__title-original">${filmInfo.title}</p>
+            <p class="film-details__title-original">${filmInfo.alternativeTitle}</p>
           </div>
 
           <div class="film-details__rating">
@@ -49,7 +61,7 @@ const createFilmPopupTemplate = (card) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${filmInfo.runtime}</td>
+            <td class="film-details__cell">${getRuntimeFromMinutes(filmInfo.runtime)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
@@ -58,9 +70,8 @@ const createFilmPopupTemplate = (card) => {
           <tr class="film-details__row">
             <td class="film-details__term">Genres</td>
             <td class="film-details__cell">
-              <span class="film-details__genre">${filmInfo.genre}</span>
-              <span class="film-details__genre">${filmInfo.genre}</span>
-              <span class="film-details__genre">${filmInfo.genre}</span></td>
+              ${createGenresElement(filmInfo.genre)}
+            </td>
           </tr>
         </table>
 
