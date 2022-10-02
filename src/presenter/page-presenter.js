@@ -79,7 +79,7 @@ export default class PagePresenter {
   #renderCard = (card) => {
     const filmPresenterArguments = {
       'filmlistContainer':this.#filmListContainerComponent.element,
-      'filmDataChange':this.#handleModelEvent,
+      'filmDataChange':this.#handleDataChange,
       'pageModeChange':this.#handleModeChange,
       'pageContainer':this.#pageContainer,
       'sortButtonsHandler':this.#sortButtonsHandler,
@@ -206,6 +206,10 @@ export default class PagePresenter {
   };
 
   //функции для элементов
+  #handleDataChange = (updateType, data) => {
+    this.#cardsModel.updateCard(updateType, data);
+  };
+
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.MINOR:
@@ -221,8 +225,6 @@ export default class PagePresenter {
     }
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#cardsModel.updateCard(updateType, data);
-
         this.#filmPresenter.get(data.id).init(data);
 
         this.#renderFilterButtons(this.#findFilmsMarks());

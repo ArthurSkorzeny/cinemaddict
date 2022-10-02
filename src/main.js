@@ -1,6 +1,6 @@
 import PagePresenter from './presenter/page-presenter.js';
 import CardsModel from './model/card-model.js';
-import CardsApiService from './cards-api-service.js';
+import CardsApiService from './api-services/cards-api-service';
 
 const AUTHORIZATION = 'Basic dfhjkd433wsysg34';
 const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
