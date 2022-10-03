@@ -43,6 +43,7 @@ export default class FilmPresenter {
   #popupCommentsList = null;
   #popupNewCommentForm = null;
   #commentsModel = null;
+  #firstLaunch = true;
   #commentsWrap = null;
   #cardComments = null;
 
@@ -114,14 +115,8 @@ export default class FilmPresenter {
     remove(this.#popupComponent);
   };
 
-  #handleModelEvent = (info) => {
-    if(info === 1){
-      if(this.#mode === Mode.POPUP){
-        console.log(this.comments);
-        this.#renderCommentsInner();
-      }
-    }
-
+  #handleModelEvent = () => {
+    this.#renderCommentsInner();
   };
 
   #openPopup = () => {
@@ -222,6 +217,7 @@ export default class FilmPresenter {
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
   };
 
+  //комментарии
   #renderComment = (comment) => {
     const commentPresenterArguments = {
       'commentlistContainer':this.#popupCommentsList.element,
@@ -249,7 +245,6 @@ export default class FilmPresenter {
   #renderCommentsInner = () => {
     this.#clearCommentsInner();
     this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.comments.length);
-    console.log(1);
     this.#popupCommentsList = new FilmDetailsCommentsListView();
 
     render(this.#popupBottomContainer, this.#popupInner.element);
@@ -261,22 +256,5 @@ export default class FilmPresenter {
 
   #clearCommentsInner = () => {
     remove(this.#popupBottomContainer);
-  };
-
-  #renderCard = () => {
-    const prevFilmCardComponent = this.#filmCardComponent;
-    this.#filmCardComponent = new FilmCardView(this.#card, this.#cardComments.length);
-
-
-    if (prevFilmCardComponent === null){
-      render(this.#filmCardComponent, this.#filmListContainer);
-      this.#cardButtonsHandler();
-      return;
-    } else {
-      replace(this.#filmCardComponent, prevFilmCardComponent);
-      this.#cardButtonsHandler();
-      remove(prevFilmCardComponent);
-    }
-
   };
 }
