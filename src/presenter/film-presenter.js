@@ -63,8 +63,6 @@ export default class FilmPresenter {
 
   init = (card) => {
     this.#card = card;
-    this.#commentsModel.init(this.#card);
-    this.#commentsModel.addObserver(console.log(this.comments));
 
     const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopupComponent = this.#popupComponent;
@@ -118,6 +116,8 @@ export default class FilmPresenter {
     render(this.#popupSection, this.#pageContainer);
     render(this.#popupInner, this.#popupSection.element);
     render(this.#popupComponent, this.#popupInner.element);
+    this.#commentsModel.init(this.#card);
+    this.#commentsModel.addObserver(console.log(this.comments));
 
     //this.#renderCommentsInner();
   };
