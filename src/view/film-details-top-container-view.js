@@ -4,7 +4,7 @@ import {getYear, getRuntimeFromMinutes} from '../utils/common';
 const createFilmPopupTemplate = (card) => {
   const {filmInfo, userDetails} = card;
 
-  const getFilterType = (filterValue) => filterValue === false ? 'film-details__control-button--active' : '';
+  const getFilterType = (filterValue) => filterValue === true ? 'film-details__control-button--active' : '';
 
   const createGenresElement = (genres) => {
 

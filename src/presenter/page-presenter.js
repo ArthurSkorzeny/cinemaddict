@@ -25,6 +25,7 @@ const CARD_MODE = 'CARD';
 export default class PagePresenter {
   #pageContainer = null;
   #cardsModel = null;
+  #commentsModel = null;
   #headerContainer = null;
   #footerContainer = null;
   #cardsList = null;
@@ -49,12 +50,13 @@ export default class PagePresenter {
   #renderedFilmsCount = FILMS_PER_CLICK;
   #filmPresenter = new Map();
 
-  constructor(pageContainer, cardsModel, headerContainer, footerContainer) {
+  constructor(pageContainer, cardsModel, headerContainer, footerContainer, commentsModel) {
     this.#headerContainer = headerContainer;
     this.#footerContainer = footerContainer;
 
     this.#pageContainer = pageContainer;
     this.#cardsModel = cardsModel;
+    this.#commentsModel = commentsModel;
 
     this.#cardsModel.addObserver(this.#handleModelEvent);
   }
@@ -77,12 +79,14 @@ export default class PagePresenter {
 
   //взаимодействие с film-presenter и отрисовка фильмов
   #renderCard = (card) => {
+    this.#commentsModel.init();
     const filmPresenterArguments = {
       'filmlistContainer':this.#filmListContainerComponent.element,
       'filmDataChange':this.#handleDataChange,
       'pageModeChange':this.#handleModeChange,
       'pageContainer':this.#pageContainer,
       'sortButtonsHandler':this.#sortButtonsHandler,
+      'commentsModel': this.#commentsModel,
     };
 
     const filmPresenter = new FilmPresenter(filmPresenterArguments);
@@ -130,7 +134,7 @@ export default class PagePresenter {
         break;
       default:
         cardsCount = this.cards.length;
-        this.#cardsList = this.cards;
+        this.#cardsList = [...this.cards];
         break;
     }
 
@@ -219,8 +223,8 @@ export default class PagePresenter {
     }
     switch (updateType) {
       case UpdateType.MAJOR:
-        this.#clearPage();
-        this.#renderPage();
+        this.#filmPresenter.forEach((presenter) => presenter.init());
+        this.#renderFilterButtons(this.#findFilmsMarks());
         break;
     }
     switch (updateType) {
@@ -263,15 +267,15 @@ export default class PagePresenter {
   #findFilmsMarks = () =>
     this.cards.reduce((marks, card) => {
 
-      if(card.userDetails.watchlist === true){
+      if(card.userDetails.watchlist){
         marks.watchlist = marks.watchlist + 1;
       }
 
-      if(card.userDetails.alreadyWatched === true){
+      if(card.userDetails.alreadyWatched){
         marks.alreadyWatched = marks.alreadyWatched + 1;
       }
 
-      if(card.userDetails.favorite === true){
+      if(card.userDetails.favorite){
         marks.favorite = marks.favorite + 1;
       }
 

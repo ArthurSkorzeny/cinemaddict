@@ -13,14 +13,13 @@ export default class CardsModel extends Observable{
   }
 
   get cards() {
-    return this.#cards;
+    return [...this.#cards];
   }
 
   init = async () => {
     try {
       const cards = await this.#cardsApiService.cards;
       this.#cards = cards.map(this.#adaptToClient);
-      console.log(this.#cards);
     } catch(err) {
       this.#cards = [];
     }

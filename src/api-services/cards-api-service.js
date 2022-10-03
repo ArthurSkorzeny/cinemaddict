@@ -1,9 +1,5 @@
 import ApiService from '../framework/api-service.js';
-
-const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-};
+import {Method} from '../const.js';
 
 export default class CardsApiService extends ApiService {
   get cards() {
@@ -46,14 +42,6 @@ export default class CardsApiService extends ApiService {
 
     delete adaptedCard.filmInfo;
     delete adaptedCard.userDetails;
-
-    delete adaptedCard.filmInfo.alternativeTitle;
-    delete adaptedCard.filmInfo.totalRating;
-    delete adaptedCard.filmInfo.ageRating;
-    delete adaptedCard.filmInfo.release.releaseCountry;
-
-    delete adaptedCard.userDetails.alreadyWatched;
-    delete adaptedCard.userDetails.watchingDate;
 
     return adaptedCard;
   };
