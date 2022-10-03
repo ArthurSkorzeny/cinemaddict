@@ -22,7 +22,7 @@ export default class CommentsModel extends Observable{
       this.#comments = [];
     }
 
-    this._notify();
+    this._notify(1);
   };
 
   add = async (updateType, card, createdComment) => {
