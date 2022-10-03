@@ -79,7 +79,6 @@ export default class PagePresenter {
 
   //взаимодействие с film-presenter и отрисовка фильмов
   #renderCard = (card) => {
-    this.#commentsModel.init();
     const filmPresenterArguments = {
       'filmlistContainer':this.#filmListContainerComponent.element,
       'filmDataChange':this.#handleDataChange,
