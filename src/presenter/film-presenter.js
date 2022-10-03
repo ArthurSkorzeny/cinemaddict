@@ -65,7 +65,6 @@ export default class FilmPresenter {
 
   init = (card) => {
     this.#card = card;
-    this.#commentsModel.init(this.#card);
 
     const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopupComponent = this.#popupComponent;
@@ -117,19 +116,22 @@ export default class FilmPresenter {
 
   #handleModelEvent = (info) => {
     if(info === 1){
-      if(this.comments.length > 0){
-        this.init(this.#card);
+      if(this.#mode === Mode.POPUP){
+        console.log(this.comments);
+        this.#renderCommentsInner();
       }
     }
 
   };
 
   #openPopup = () => {
+    this.#commentsModel.init(this.#card);
+
     render(this.#popupSection, this.#pageContainer);
     render(this.#popupInner, this.#popupSection.element);
     render(this.#popupComponent, this.#popupInner.element);
 
-    this.#renderCommentsInner();
+    //this.#renderCommentsInner();
   };
 
   #closePopup = () => {
