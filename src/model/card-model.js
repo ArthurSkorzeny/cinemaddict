@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Observable from '../framework/observable.js';
 import {UpdateType} from '../const.js';
 

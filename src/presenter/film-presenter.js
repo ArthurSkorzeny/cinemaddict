@@ -43,9 +43,7 @@ export default class FilmPresenter {
   #popupCommentsList = null;
   #popupNewCommentForm = null;
   #commentsModel = null;
-  #firstLaunch = true;
   #commentsWrap = null;
-  #cardComments = null;
 
   #commentPresenter = new Map();
 
@@ -70,7 +68,7 @@ export default class FilmPresenter {
     const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopupComponent = this.#popupComponent;
 
-    this.#filmCardComponent = new FilmCardView(this.#card, this.comments.length);
+    this.#filmCardComponent = new FilmCardView(this.#card);
 
     this.#popupSection = new FilmsDetailsView();
     this.#popupInner = new FilmDeatilsInnerView();
@@ -125,8 +123,6 @@ export default class FilmPresenter {
     render(this.#popupSection, this.#pageContainer);
     render(this.#popupInner, this.#popupSection.element);
     render(this.#popupComponent, this.#popupInner.element);
-
-    //this.#renderCommentsInner();
   };
 
   #closePopup = () => {

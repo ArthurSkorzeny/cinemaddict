@@ -244,6 +244,8 @@ export default class PagePresenter {
         remove(this.#loadingComponent);
         this.#renderPage();
         break;
+      default:
+        break;
     }
   };
 

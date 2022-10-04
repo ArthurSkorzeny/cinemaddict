@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 import {getYear, getRuntimeFromMinutes} from '../utils/common';
 
 
-const createFilmCardTemplate = (card, commentsLength) => {
+const createFilmCardTemplate = (card) => {
   const {filmInfo, userDetails} = card;
 
   const getFilterType = (filterValue) => filterValue === true ? 'film-card__controls-item--active' : '';
@@ -19,7 +19,7 @@ const createFilmCardTemplate = (card, commentsLength) => {
        </p>
        <img src="${filmInfo.poster}" alt="" class="film-card__poster">
        <p class="film-card__description">${filmInfo.description}</p>
-       <span class="film-card__comments">${commentsLength}</span>
+       <span class="film-card__comments">${card.comments.length}</span>
      </a>
      <div class="film-card__controls">
        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${getFilterType(userDetails.watchlist)}" type="button">Add to watchlist</button>
