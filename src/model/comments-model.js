@@ -1,36 +1,45 @@
 import Observable from '../framework/observable.js';
-import {generateComment} from '../mock/comment';
-
-const COMMENTS_LIST_LENGTH = 3;
 
 export default class CommentsModel extends Observable{
-  #comments = Array.from({length: COMMENTS_LIST_LENGTH}, generateComment);
+  #comments = [];
+  #apiService = null;
+  #cardsModel = null;
 
-  get comments() {
-    return this.#comments;
+  constructor(apiService, cardsModel){
+    super();
+    this.#apiService = apiService;
+    this.#cardsModel = cardsModel;
   }
 
-  addComment = (updateType, update) => {
-    this.#comments = [
-      update,
-      ...this.#comments,
-    ];
+  get comments() {
+    return [...this.#comments];
+  }
 
-    this._notify(updateType, update);
-  };
-
-  deleteComment = (updateType, update) => {
-    const index = this.#comments.findIndex((comment) => comment.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting comment');
+  init = async (card) => {
+    try {
+      this.#comments = await this.#apiService.get(card);
+    } catch(err) {
+      this.#comments = [];
     }
 
-    this.#comments = [
-      ...this.#comments.slice(0, index),
-      ...this.#comments.slice(index + 1),
-    ];
+    this._notify();
+    this.#comments = [];
+  };
 
-    this._notify(updateType);
+  add = async (updateType, card, createdComment) => {
+    try{
+      const response = await this.#apiService.add(card,createdComment);
+
+      this.#comments = response.comments;
+
+      this.#cardsModel.updateCard({
+        updateType,
+        update: response.movie,
+        isAdapted: false
+      });
+
+    }catch{
+      throw new Error('Can\'t add comment');
+    }
   };
 }

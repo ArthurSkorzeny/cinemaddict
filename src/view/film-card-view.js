@@ -1,11 +1,11 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getYear} from '../utils/common';
+import {getYear, getRuntimeFromMinutes} from '../utils/common';
 
 
-const createFilmCardTemplate = (card, commentsLength) => {
+const createFilmCardTemplate = (card) => {
   const {filmInfo, userDetails} = card;
 
-  const getFilterType = (filterValue) => filterValue === false ? 'film-card__controls-item--active' : '';
+  const getFilterType = (filterValue) => filterValue === true ? 'film-card__controls-item--active' : '';
 
   return (
     `<article class="film-card">
@@ -14,12 +14,12 @@ const createFilmCardTemplate = (card, commentsLength) => {
        <p class="film-card__rating">${filmInfo.totalRating}</p>
        <p class="film-card__info">
          <span class="film-card__year">${getYear(filmInfo.release.date)}</span>
-         <span class="film-card__duration">${filmInfo.runtime}</span>
-         <span class="film-card__genre">${filmInfo.genre}</span>
+         <span class="film-card__duration">${getRuntimeFromMinutes(filmInfo.runtime)}</span>
+         <span class="film-card__genre">${filmInfo.genre[0]}</span>
        </p>
        <img src="${filmInfo.poster}" alt="" class="film-card__poster">
        <p class="film-card__description">${filmInfo.description}</p>
-       <span class="film-card__comments">${commentsLength}</span>
+       <span class="film-card__comments">${card.comments.length}</span>
      </a>
      <div class="film-card__controls">
        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${getFilterType(userDetails.watchlist)}" type="button">Add to watchlist</button>
