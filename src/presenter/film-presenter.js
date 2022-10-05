@@ -53,8 +53,6 @@ export default class FilmPresenter {
     this.#pageContainer = pageContainer;
     this.#sortButtonsHandler = sortButtonsHandler;
     this.#commentsModel = commentsModel;
-
-    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   get comments() {
@@ -119,6 +117,7 @@ export default class FilmPresenter {
   };
 
   #openPopup = () => {
+    this.#commentsModel.addObserver(this.#handleModelEvent);
     this.#commentsModel.init(this.#card);
 
     render(this.#popupSection, this.#pageContainer);
@@ -127,9 +126,7 @@ export default class FilmPresenter {
   };
 
   #closePopup = () => {
-    this.#commentPresenter.forEach((presenter) => presenter.destroy());
-    this.#commentPresenter.clear();
-    this.#clearCommentsInner();
+    this.#commentsModel.removeObserver(this.#handleModelEvent);
     remove(this.#popupSection);
     this.#popupComponent.deleteHideOverFlowFromBody();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
