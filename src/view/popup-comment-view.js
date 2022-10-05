@@ -1,4 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import dayjs from 'dayjs';
+
+let type = 'Delete';
 
 const createFilmDetailsCommentTemplate = (comment) => (
   `<li class="film-details__comment">
@@ -9,8 +12,8 @@ const createFilmDetailsCommentTemplate = (comment) => (
      <p class="film-details__comment-text">${comment.comment}</p>
      <p class="film-details__comment-info">
        <span class="film-details__comment-author">${comment.author}</span>
-       <span class="film-details__comment-day">${comment.date}/12/31 23:59</span>
-       <button class="film-details__comment-delete">Delete</button>
+       <span class="film-details__comment-day">${dayjs(comment.date).format('YYYY/M/D h:mm')}</span>
+       <button class="film-details__comment-delete">${type}</button>
      </p>
    </div>
    </li>`
@@ -28,6 +31,25 @@ export default class FilmCommentView extends AbstractView{
   get template() {
     return createFilmDetailsCommentTemplate(this.#comment);
   }
+
+  onDeleteButtonClick = () => {
+
+    this.element.querySelector('.film-details__comment-delete').addEventListener('click', () => {
+      type = 'Deleting...';
+      this.rerenderElement();
+    });
+  };
+
+  rerenderElement = () => {
+    const prevElement = this.element;
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.element;
+
+    parent.replaceChild(newElement, prevElement);
+
+  };
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();

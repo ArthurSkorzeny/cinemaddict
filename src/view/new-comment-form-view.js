@@ -1,8 +1,17 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import he from 'he';
 
+const CommentValues = {
+  'emoji-smile': 'images/emoji/smile.png',
+  'emoji-sleeping': 'images/emoji/sleeping.png',
+  'emoji-puke': 'images/emoji/puke.png',
+  'emoji-angry': 'images/emoji/angry.png',
+};
+const CommentEmotion = ['smile', 'sleeping', 'puke', 'angry'];
+
 let currentText = 'Great movie!';
 let currentEmoji = 'images/emoji/smile.png';
+let commentEmotion = CommentEmotion[1];
 
 const createCommentFormTemplate = () => (
   `<form class="film-details__new-comment" action="" method="get">
@@ -58,19 +67,11 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
     const emojiButtons = this.element.querySelectorAll('.film-details__emoji-item');
 
     emojiButtons.forEach((b) => {b.addEventListener('click',
-      (e) => {
-
-        const COMMENT_VALUES = {
-          'emoji-smile': 'images/emoji/smile.png',
-          'emoji-sleeping': 'images/emoji/sleeping.png',
-          'emoji-puke': 'images/emoji/puke.png',
-          'emoji-angry': 'images/emoji/angry.png',
-        };
-
+      (evt) => {
         let currentId = '';
-        currentId = e.target.id;
+        currentId = evt.target.id;
 
-        currentEmoji = COMMENT_VALUES[currentId];
+        currentEmoji = CommentValues[currentId];
 
         this.#rerenderElement();
 
@@ -99,5 +100,31 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
     parent.replaceChild(newElement, prevElement);
 
     this._restoreHandlers();
+  };
+
+  getNewComment = () => {
+    if(currentEmoji === CommentValues['emoji-smile']){
+      commentEmotion = CommentEmotion[0];
+    }
+    if(currentEmoji === CommentValues['emoji-sleeping']){
+      commentEmotion = CommentEmotion[1];
+    }
+    if(currentEmoji === CommentValues['emoji-puke']){
+      commentEmotion = CommentEmotion[2];
+    }
+    if(currentEmoji === CommentValues['emoji-angry']){
+      commentEmotion = CommentEmotion[3];
+    }
+
+    return {
+      'comment': currentText,
+      'emotion': commentEmotion
+    };
+  };
+
+  setBasicValues = () => {
+    currentText = 'Great movie!';
+    currentEmoji = 'images/emoji/smile.png';
+    commentEmotion = CommentEmotion[1];
   };
 }

@@ -1,20 +1,20 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createPopupCommentsWrapTemplate = (commentsLength) => (
+const createPopupCommentsWrapTemplate = (card) => (
   `<section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsLength}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${card.comments.length}</span></h3>
    </section>`
 );
 
 export default class FilmDetailsCommentsWrapView extends AbstractView{
-  #commentsLength = null;
+  #card = null;
 
-  constructor(commentsLength) {
+  constructor(card) {
     super();
-    this.#commentsLength = commentsLength;
+    this.#card = card;
   }
 
   get template() {
-    return createPopupCommentsWrapTemplate(this.#commentsLength);
+    return createPopupCommentsWrapTemplate(this.#card);
   }
 }

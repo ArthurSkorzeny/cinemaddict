@@ -14,6 +14,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const sortModes = {
@@ -29,4 +30,16 @@ const filterModes = {
   favorites: 'favorites',
 };
 
-export {UserAction, UpdateType, FilterType, sortModes, filterModes};
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const EventValues = {
+  'SUCCES': 'SUCCES',
+  'FAIL': 'SUCCES'
+};
+
+export {UserAction, UpdateType, FilterType, sortModes, filterModes, Method, EventValues};
