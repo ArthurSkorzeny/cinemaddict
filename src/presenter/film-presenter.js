@@ -1,11 +1,12 @@
 /* eslint-disable no-useless-return */
 import {render, replace, remove} from '../framework/render.js';
-import {UpdateType} from '../const.js';
+import {UpdateType, EventValues} from '../const.js';
 
 import CommentPresenter from './comments-presenter.js';
 
 
 import FilmCardView from '../view/film-card-view.js';
+import FilmCommentView from '../view/popup-comment-view.js';
 
 import FilmsDetailsView from '../view/film-details-section-view.js';
 import FilmDeatilsInnerView from '../view/film-details-inner-view.js';
@@ -32,8 +33,8 @@ export default class FilmPresenter {
   #mode = Mode.CARD;
   #scrollPosition = null;
 
+  #filmCommentComponent = new FilmCommentView();
   #filmCardComponent = null;
-
   #popupSection = null;
   #popupInner = null;
   #popupComponent = null;
@@ -54,8 +55,6 @@ export default class FilmPresenter {
     this.#pageContainer = pageContainer;
     this.#sortButtonsHandler = sortButtonsHandler;
     this.#commentsModel = commentsModel;
-
-    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   get comments() {
@@ -69,13 +68,15 @@ export default class FilmPresenter {
     const prevFilmPopupComponent = this.#popupComponent;
 
     this.#filmCardComponent = new FilmCardView(this.#card);
+    this.#popupInner = new FilmDeatilsInnerView();
 
     this.#popupSection = new FilmsDetailsView();
-    this.#popupInner = new FilmDeatilsInnerView();
     this.#popupComponent = new FilmPopupView(this.#card);
 
     this.#popupBottomContainer = new FilmDetailsBottomContainerView();
+    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(card);
     this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
+    this.#popupCommentsList = new FilmDetailsCommentsListView();
 
     this.#popupButtonsHandler();
 
@@ -113,11 +114,22 @@ export default class FilmPresenter {
     remove(this.#popupComponent);
   };
 
-  #handleModelEvent = () => {
+  #handleDownloadEvent = () => {
     this.#renderCommentsInner();
   };
 
+  #handleCommentEvent = (result) => {
+    document.querySelectorAll('button').forEach((button) => {button.disabled = false;});
+
+    if(result === EventValues.SUCCES){
+      this.#commentsModel.init(this.#card);
+      this.#clearCommentsInner();
+      this.#renderCommentsInner();
+    }
+  };
+
   #openPopup = () => {
+    this.#commentsModel.addObserver(this.#handleDownloadEvent);
     this.#commentsModel.init(this.#card);
 
     render(this.#popupSection, this.#pageContainer);
@@ -126,8 +138,8 @@ export default class FilmPresenter {
   };
 
   #closePopup = () => {
-    remove(this.#popupSection);
     this.#clearCommentsInner();
+    remove(this.#popupSection);
     this.#popupComponent.deleteHideOverFlowFromBody();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.deleteClickHandler(this.#closePopup);
@@ -213,12 +225,24 @@ export default class FilmPresenter {
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
   };
 
+  #handleNewComment = () => {
+    document.querySelectorAll('button').forEach((button) => {button.disabled = true;});
+    this.#commentsModel.addObserver(this.#handleCommentEvent);
+    this.#commentsModel.add(this.#card, this.#popupNewCommentForm.getNewComment());
+  };
+
+  #handleDeleteComment = (comment) => {
+    document.querySelectorAll('button').forEach((button) => {button.disabled = true;});
+    this.#commentsModel.addObserver(this.#handleCommentEvent);
+    this.#commentsModel.delete(comment);
+  };
+
   //комментарии
   #renderComment = (comment) => {
     const commentPresenterArguments = {
       'commentlistContainer':this.#popupCommentsList.element,
       'card':this.#card,
-      'deleteCommentHandler':this.#deleteCommentHandler,
+      'deleteCommentHandler':this.#handleDeleteComment,
     };
 
     const commentPresenter = new CommentPresenter(commentPresenterArguments);
@@ -230,27 +254,25 @@ export default class FilmPresenter {
     comments.forEach((comment) => this.#renderComment(comment));
   };
 
-  #deleteCommentHandler = (updateType, update) => {
-    this.#commentsModel.deleteComment(updateType, update);
-    this.#commentsWrap = new FilmDetailsCommentsWrapView(this.comments.length);
-    //убирать id коммента из карточки
-    this.#clearCommentsInner();
-    this.#renderCommentsInner();
-  };
-
   #renderCommentsInner = () => {
-    this.#clearCommentsInner();
-    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.comments.length);
-    this.#popupCommentsList = new FilmDetailsCommentsListView();
-
     render(this.#popupBottomContainer, this.#popupInner.element);
     render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
     render(this.#popupCommentsList, this.#popupCommentsWrap.element);
     this.#renderComments(this.comments);
     render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
+    document.addEventListener('keydown', (evt)=> {
+      if (evt.key === 'Enter' && evt.ctrlKey) {
+        evt.preventDefault();
+        this.#handleNewComment();
+      }
+    });
+    this.#commentsModel.removeObserver(this.#handleDownloadEvent);
   };
 
   #clearCommentsInner = () => {
+    remove(this.#popupNewCommentForm);
     remove(this.#popupBottomContainer);
+    remove(this.#popupCommentsList);
+    this.#popupNewCommentForm.setBasicValues();
   };
 }

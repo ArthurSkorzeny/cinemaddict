@@ -1,4 +1,6 @@
 import Observable from '../framework/observable.js';
+import {EventValues} from '../const.js';
+
 
 export default class CommentsModel extends Observable{
   #comments = [];
@@ -26,20 +28,27 @@ export default class CommentsModel extends Observable{
     this.#comments = [];
   };
 
-  add = async (updateType, card, createdComment) => {
+  add = async (card, createdComment) => {
     try{
       const response = await this.#apiService.add(card,createdComment);
-
       this.#comments = response.comments;
-
-      this.#cardsModel.updateCard({
-        updateType,
-        update: response.movie,
-        isAdapted: false
-      });
 
     }catch{
       throw new Error('Can\'t add comment');
     }
+
+    this._notify(EventValues.SUCCES);
+    this.#comments = [];
+  };
+
+  delete = async (comment) => {
+    try {
+      await this.#apiService.deleteComment(comment);
+
+    } catch (err) {
+      throw new Error('Cant delete comment');
+    }
+
+    this._notify(EventValues.SUCCES);
   };
 }

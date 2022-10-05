@@ -33,6 +33,13 @@ const filterModes = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
-export {UserAction, UpdateType, FilterType, sortModes, filterModes, Method};
+const EventValues = {
+  'SUCCES': 'SUCCES',
+  'FAIL': 'SUCCES'
+};
+
+export {UserAction, UpdateType, FilterType, sortModes, filterModes, Method, EventValues};

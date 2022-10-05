@@ -1,5 +1,4 @@
 import {render} from '../framework/render.js';
-import {UpdateType} from '../const.js';
 import FilmCommentView from '../view/popup-comment-view.js';
 
 
@@ -26,6 +25,6 @@ export default class CommentPresenter {
   };
 
   #deleteCommentButton = () => {
-    this.#deleteCommentHandler(UpdateType.MINOR, this.#comment);
+    this.#deleteCommentHandler(this.#comment);
   };
 }
