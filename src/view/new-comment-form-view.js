@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import AbstractView from '../framework/view/abstract-view.js';
 import he from 'he';
 
@@ -8,9 +7,11 @@ const CommentValues = {
   'emoji-puke': 'images/emoji/puke.png',
   'emoji-angry': 'images/emoji/angry.png',
 };
+const CommentEmotion = ['smile', 'sleeping', 'puke', 'angry'];
 
 let currentText = 'Great movie!';
 let currentEmoji = 'images/emoji/smile.png';
+let commentEmotion = CommentEmotion[1];
 
 const createCommentFormTemplate = () => (
   `<form class="film-details__new-comment" action="" method="get">
@@ -82,13 +83,6 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
     this.element.querySelector('.film-details__comment-input')
       .addEventListener('input', this.#commentInputHandler);
     });
-
-    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', (evt)=> {
-      if (evt.key === 'Enter') {
-        evt.preventDefault();
-        alert('отправлено');
-      }
-    });
   };
 
   #commentInputHandler = (evt) => {
@@ -106,5 +100,31 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
     parent.replaceChild(newElement, prevElement);
 
     this._restoreHandlers();
+  };
+
+  getNewComment = () => {
+    if(currentEmoji === CommentValues['emoji-smile']){
+      commentEmotion = CommentEmotion[0];
+    }
+    if(currentEmoji === CommentValues['emoji-sleeping']){
+      commentEmotion = CommentEmotion[1];
+    }
+    if(currentEmoji === CommentValues['emoji-puke']){
+      commentEmotion = CommentEmotion[2];
+    }
+    if(currentEmoji === CommentValues['emoji-angry']){
+      commentEmotion = CommentEmotion[3];
+    }
+
+    return {
+      'comment': currentText,
+      'emotion': commentEmotion
+    };
+  };
+
+  setBasicValues = () => {
+    currentText = 'Great movie!';
+    currentEmoji = 'images/emoji/smile.png';
+    commentEmotion = CommentEmotion[1];
   };
 }

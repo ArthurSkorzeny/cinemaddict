@@ -19,4 +19,13 @@ export default class CommentsApiService extends ApiService {
 
     return parsedResponse;
   };
+
+  deleteComment = async (comment) => {
+    const response = await this._load({
+      url: `comments/${comment.id}`,
+      method: Method.DELETE,
+    });
+
+    return response;
+  };
 }
