@@ -33,7 +33,6 @@ export default class FilmPresenter {
   #scrollPosition = null;
 
   #filmCardComponent = null;
-
   #popupSection = null;
   #popupInner = null;
   #popupComponent = null;
@@ -69,13 +68,15 @@ export default class FilmPresenter {
     const prevFilmPopupComponent = this.#popupComponent;
 
     this.#filmCardComponent = new FilmCardView(this.#card);
+    this.#popupInner = new FilmDeatilsInnerView();
 
     this.#popupSection = new FilmsDetailsView();
     this.#popupComponent = new FilmPopupView(this.#card);
 
-    this.#popupBottomContainer = null;
-    this.#popupCommentsList = null;
-    this.#popupNewCommentForm = null;
+    this.#popupBottomContainer = new FilmDetailsBottomContainerView();
+    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(card);
+    this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
+    this.#popupCommentsList = new FilmDetailsCommentsListView();
 
     this.#popupButtonsHandler();
 
@@ -118,7 +119,6 @@ export default class FilmPresenter {
   };
 
   #openPopup = () => {
-    this.#popupInner = new FilmDeatilsInnerView();
     this.#commentsModel.init(this.#card);
 
     render(this.#popupSection, this.#pageContainer);
@@ -127,6 +127,8 @@ export default class FilmPresenter {
   };
 
   #closePopup = () => {
+    this.#commentPresenter.forEach((presenter) => presenter.destroy());
+    this.#commentPresenter.clear();
     this.#clearCommentsInner();
     remove(this.#popupSection);
     this.#popupComponent.deleteHideOverFlowFromBody();
@@ -243,11 +245,6 @@ export default class FilmPresenter {
   };
 
   #renderCommentsInner = () => {
-    this.#popupBottomContainer = new FilmDetailsBottomContainerView();
-    this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.comments.length);
-    this.#popupCommentsList = new FilmDetailsCommentsListView();
-    this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
-
     render(this.#popupBottomContainer, this.#popupInner.element);
     render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
     render(this.#popupCommentsList, this.#popupCommentsWrap.element);
