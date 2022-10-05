@@ -71,11 +71,11 @@ export default class FilmPresenter {
     this.#filmCardComponent = new FilmCardView(this.#card);
 
     this.#popupSection = new FilmsDetailsView();
-    this.#popupInner = new FilmDeatilsInnerView();
     this.#popupComponent = new FilmPopupView(this.#card);
 
-    this.#popupBottomContainer = new FilmDetailsBottomContainerView();
-    this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
+    this.#popupBottomContainer = null;
+    this.#popupCommentsList = null;
+    this.#popupNewCommentForm = null;
 
     this.#popupButtonsHandler();
 
@@ -118,6 +118,7 @@ export default class FilmPresenter {
   };
 
   #openPopup = () => {
+    this.#popupInner = new FilmDeatilsInnerView();
     this.#commentsModel.init(this.#card);
 
     render(this.#popupSection, this.#pageContainer);
@@ -126,8 +127,8 @@ export default class FilmPresenter {
   };
 
   #closePopup = () => {
-    remove(this.#popupSection);
     this.#clearCommentsInner();
+    remove(this.#popupSection);
     this.#popupComponent.deleteHideOverFlowFromBody();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#popupComponent.deleteClickHandler(this.#closePopup);
@@ -213,6 +214,10 @@ export default class FilmPresenter {
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleWatchedClick);
   };
 
+  #handleNewComment = () => {
+    this.#commentsModel.add(this.#card, this.#popupNewCommentForm.getNewComment());
+  };
+
   //комментарии
   #renderComment = (comment) => {
     const commentPresenterArguments = {
@@ -233,24 +238,31 @@ export default class FilmPresenter {
   #deleteCommentHandler = (updateType, update) => {
     this.#commentsModel.deleteComment(updateType, update);
     this.#commentsWrap = new FilmDetailsCommentsWrapView(this.comments.length);
-    //убирать id коммента из карточки
     this.#clearCommentsInner();
     this.#renderCommentsInner();
   };
 
   #renderCommentsInner = () => {
-    this.#clearCommentsInner();
+    this.#popupBottomContainer = new FilmDetailsBottomContainerView();
     this.#popupCommentsWrap = new FilmDetailsCommentsWrapView(this.comments.length);
     this.#popupCommentsList = new FilmDetailsCommentsListView();
+    this.#popupNewCommentForm = new FilmDetailsNewCommentFormView();
 
     render(this.#popupBottomContainer, this.#popupInner.element);
     render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
     render(this.#popupCommentsList, this.#popupCommentsWrap.element);
     this.#renderComments(this.comments);
     render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
+    document.addEventListener('keydown', (evt)=> {
+      if (evt.key === 'Enter' && evt.ctrlKey) {
+        evt.preventDefault();
+        this.#handleNewComment();
+      }
+    });
   };
 
   #clearCommentsInner = () => {
     remove(this.#popupBottomContainer);
+    this.#popupNewCommentForm.setBasicValues();
   };
 }
