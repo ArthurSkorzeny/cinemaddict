@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import dayjs from 'dayjs';
 
 let type = 'Delete';
 
@@ -11,7 +12,7 @@ const createFilmDetailsCommentTemplate = (comment) => (
      <p class="film-details__comment-text">${comment.comment}</p>
      <p class="film-details__comment-info">
        <span class="film-details__comment-author">${comment.author}</span>
-       <span class="film-details__comment-day">${comment.date}</span>
+       <span class="film-details__comment-day">${dayjs(comment.date).format('YYYY/M/D/ h:mm')}</span>
        <button class="film-details__comment-delete">${type}</button>
      </p>
    </div>
