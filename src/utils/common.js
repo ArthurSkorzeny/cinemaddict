@@ -18,7 +18,7 @@ const getRuntimeFromMinutes = (valueFromServer) => {
   }
 
   if(valueFromServer > hourInMinutes){
-    return `${parseInt(valueFromServer / hourInMinutes)}h ${valueFromServer % 60}m`;
+    return `${parseInt(valueFromServer / hourInMinutes, 10)}h ${valueFromServer % 60}m`;
   }
 };
 
