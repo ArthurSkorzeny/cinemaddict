@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 const hoursInMinutesArray = [60, 120, 180, 240, 300];
 const hourInMinutes = 60;
 
