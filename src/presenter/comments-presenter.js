@@ -50,6 +50,9 @@ export default class CommentPresenter {
       this.init(this.#comment, CommentDeleteStatus.DELETE);
       this.#filmCommentComponent.shake();
       this.#commentsModel.removeObserver(this.#onFailResult);
+    }else{
+      this.#commentEvent(result);
     }
+
   };
 }
