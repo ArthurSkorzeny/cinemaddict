@@ -102,8 +102,6 @@ export default class FilmPresenter {
       this.#popupComponent.scrollToNedeedPosition(this.#scrollPosition);
       remove(prevFilmPopupComponent);
     }
-
-    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
   };
 
   resetView = () => {
@@ -176,6 +174,7 @@ export default class FilmPresenter {
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
 
+    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
     this.#changeData(
       UpdateType.PATCH,
       {
@@ -192,6 +191,7 @@ export default class FilmPresenter {
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
 
+    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
     this.#changeData(
       UpdateType.PATCH,
       {
@@ -208,6 +208,7 @@ export default class FilmPresenter {
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
 
+    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
     this.#changeData(
       UpdateType.PATCH,
       {

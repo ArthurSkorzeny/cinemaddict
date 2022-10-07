@@ -39,7 +39,6 @@ export default class CommentPresenter {
 
   #handleDeleteComment = (comment) => {
     document.querySelectorAll('button').forEach((button) => {button.disabled = true;});
-    this.#commentsModel.addObserver(this.#commentEvent);
     this.#commentsModel.addObserver(this.#onFailResult);
     this.#commentsModel.delete(comment);
     this.init(this.#comment, CommentDeleteStatus.DELETING);
@@ -47,8 +46,10 @@ export default class CommentPresenter {
 
   #onFailResult = (result) => {
     if(result === EventValues.FAIL){
+      document.querySelectorAll('button').forEach((button) => {button.disabled = false;});
       this.init(this.#comment, CommentDeleteStatus.DELETE);
       this.#filmCommentComponent.shake();
+      this.#commentsModel.removeObserver(this.#onFailResult);
     }
   };
 }
