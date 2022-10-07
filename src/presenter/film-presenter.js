@@ -184,11 +184,6 @@ export default class FilmPresenter {
           favorite: !this.#card.userDetails.favorite
         }
       });
-
-
-    if(this.#mode === Mode.POPUP){
-      this.#openPopup();
-    }
   };
 
   #handleWatchListClick = () => {
