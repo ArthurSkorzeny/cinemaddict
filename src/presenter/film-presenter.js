@@ -8,7 +8,7 @@ import FilmCardView from '../view/film-card-view.js';
 import FilmCommentView from '../view/popup-comment-view.js';
 
 import FilmsDetailsView from '../view/film-details-section-view.js';
-import FilmDeatilsInnerView from '../view/film-details-inner-view.js';
+import FilmDetailsInnerView from '../view/film-details-inner-view.js';
 import FilmPopupView from '../view/film-details-top-container-view.js';
 
 import FilmDetailsBottomContainerView from '../view/film-details-bottom-container-view.js';
@@ -69,7 +69,7 @@ export default class FilmPresenter {
     const prevFilmPopupComponent = this.#popupComponent;
 
     this.#filmCardComponent = new FilmCardView(this.#card);
-    this.#popupInner = new FilmDeatilsInnerView();
+    this.#popupInner = new FilmDetailsInnerView();
 
     this.#popupSection = new FilmsDetailsView();
     this.#popupComponent = new FilmPopupView(this.#card);
@@ -184,6 +184,11 @@ export default class FilmPresenter {
           favorite: !this.#card.userDetails.favorite
         }
       });
+
+
+    if(this.#mode === Mode.POPUP){
+      this.#openPopup();
+    }
   };
 
   #handleWatchListClick = () => {

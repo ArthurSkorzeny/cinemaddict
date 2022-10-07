@@ -17,6 +17,7 @@ import FooterStatisticView from '../view/footer-statistics-view.js';
 import EmptyFilmsListView from '../view/films-list-empty-view.js';
 import EmptyFilterFilmListView from '../view/filter-film-list-empty-view.js';
 import LoadingView from '../view/loading-view.js';
+import FilmsDetailsView from '../view/film-details-section-view.js';
 
 const FILMS_PER_CLICK = 5;
 const CARD_MODE = 'CARD';
@@ -41,6 +42,7 @@ export default class PagePresenter {
   #emptyFilmListComponent = new EmptyFilmsListView();
   #loadingComponent = new LoadingView();
   #userProfileComponent = new UserProfileView();
+  #filmDetails = new FilmsDetailsView();
   #footerStatisticComponent = null;
 
   #currentSortType = sortModes.default;
@@ -145,10 +147,12 @@ export default class PagePresenter {
 
     if(this.#currentFilterType !== filterModes.all && this.#cardsList.length === 0){
       this.#emptyFilterFilmListComponent = new EmptyFilterFilmListView(this.#currentFilterType);
-      document.querySelector('.film-details').remove();
+      this.#filmDetails.deleteFilmDetailsSection();
       render(this.#emptyFilterFilmListComponent, this.#filmListComponent.element);
+
     } else {
       render(this.#filmListContainerComponent, this.#filmListComponent.element);
+      this.#filmDetails.deleteFilmDetailsSection();
     }
 
     this.#renderFilms(this.#cardsList.slice(0, Math.min(cardsCount, FILMS_PER_CLICK)));
