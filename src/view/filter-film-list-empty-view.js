@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import AbstractView from '../framework/view/abstract-view.js';
 import {filterModes} from '../const.js';
 

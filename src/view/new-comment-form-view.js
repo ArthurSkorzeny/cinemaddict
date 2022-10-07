@@ -9,7 +9,7 @@ const CommentValues = {
 };
 const CommentEmotion = ['smile', 'sleeping', 'puke', 'angry'];
 
-let currentText = 'Great movie!';
+let currentText = '';
 let currentEmoji = 'images/emoji/smile.png';
 let commentEmotion = CommentEmotion[1];
 

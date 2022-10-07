@@ -1,6 +1,5 @@
-/* eslint-disable no-useless-return */
 import {render, replace, remove} from '../framework/render.js';
-import {UpdateType, EventValues} from '../const.js';
+import {UpdateType, EventValues, CommentDeleteStatus} from '../const.js';
 
 import CommentPresenter from './comments-presenter.js';
 
@@ -12,7 +11,7 @@ import FilmsDetailsView from '../view/film-details-section-view.js';
 import FilmDeatilsInnerView from '../view/film-details-inner-view.js';
 import FilmPopupView from '../view/film-details-top-container-view.js';
 
-import FilmDetailsBottomContainerView from '../view/film-details-bottom-container-view.js.js';
+import FilmDetailsBottomContainerView from '../view/film-details-bottom-container-view.js';
 import FilmDetailsCommentsWrapView from '../view/film-details-comments-wrap-view.js';
 import FilmDetailsCommentsListView from '../view/popup-comments-list-view.js';
 import FilmDetailsNewCommentFormView from '../view/new-comment-form-view.js';
@@ -44,17 +43,19 @@ export default class FilmPresenter {
   #popupCommentsList = null;
   #popupNewCommentForm = null;
   #commentsModel = null;
+  #cardModel = null;
   #commentsWrap = null;
 
   #commentPresenter = new Map();
 
-  constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer, sortButtonsHandler, commentsModel}) {
+  constructor({filmlistContainer, filmDataChange, pageModeChange, pageContainer, sortButtonsHandler, commentsModel, cardModel}) {
     this.#filmListContainer = filmlistContainer;
     this.#changeData = filmDataChange;
     this.#changeMode = pageModeChange;
     this.#pageContainer = pageContainer;
     this.#sortButtonsHandler = sortButtonsHandler;
     this.#commentsModel = commentsModel;
+    this.#cardModel = cardModel;
   }
 
   get comments() {
@@ -121,10 +122,14 @@ export default class FilmPresenter {
   #handleCommentEvent = (result) => {
     document.querySelectorAll('button').forEach((button) => {button.disabled = false;});
 
+    if(result === EventValues.FAIL){
+      this.#popupNewCommentForm.shake();
+    }
+
     if(result === EventValues.SUCCES){
-      this.#commentsModel.init(this.#card);
-      this.#clearCommentsInner();
-      this.#renderCommentsInner();
+      this.#changeData(
+        UpdateType.PATCH,
+        {...this.#card});
     }
   };
 
@@ -169,6 +174,7 @@ export default class FilmPresenter {
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
 
+    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
     this.#changeData(
       UpdateType.PATCH,
       {
@@ -185,6 +191,7 @@ export default class FilmPresenter {
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
 
+    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
     this.#changeData(
       UpdateType.PATCH,
       {
@@ -201,6 +208,7 @@ export default class FilmPresenter {
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
 
+    this.#cardModel.addObserver(this.#handleOnFailMarkersClick);
     this.#changeData(
       UpdateType.PATCH,
       {
@@ -210,6 +218,19 @@ export default class FilmPresenter {
           alreadyWatched: !this.#card.userDetails.alreadyWatched
         }
       });
+  };
+
+  #handleOnFailMarkersClick = (result) => {
+    if(result === EventValues.FAIL){
+      if(this.#mode === Mode.POPUP){
+        this.#cardModel.removeObserver(this.#handleOnFailMarkersClick);
+        this.#popupComponent.shake();
+      }
+      if(this.#mode === Mode.CARD){
+        this.#cardModel.removeObserver(this.#handleOnFailMarkersClick);
+        this.#filmCardComponent.shake();
+      }
+    }
   };
 
   #cardButtonsHandler = () => {
@@ -231,22 +252,17 @@ export default class FilmPresenter {
     this.#commentsModel.add(this.#card, this.#popupNewCommentForm.getNewComment());
   };
 
-  #handleDeleteComment = (comment) => {
-    document.querySelectorAll('button').forEach((button) => {button.disabled = true;});
-    this.#commentsModel.addObserver(this.#handleCommentEvent);
-    this.#commentsModel.delete(comment);
-  };
-
   //комментарии
   #renderComment = (comment) => {
     const commentPresenterArguments = {
       'commentlistContainer':this.#popupCommentsList.element,
       'card':this.#card,
-      'deleteCommentHandler':this.#handleDeleteComment,
+      'commentsModel':this.#commentsModel,
+      'commentEvent':this.#handleCommentEvent
     };
 
     const commentPresenter = new CommentPresenter(commentPresenterArguments);
-    commentPresenter.init(comment);
+    commentPresenter.init(comment, CommentDeleteStatus.DELETE);
     this.#commentPresenter.set(comment.id, commentPresenter);
   };
 
@@ -272,6 +288,7 @@ export default class FilmPresenter {
   #clearCommentsInner = () => {
     remove(this.#popupNewCommentForm);
     remove(this.#popupBottomContainer);
+    remove(this.#popupCommentsWrap);
     remove(this.#popupCommentsList);
     this.#popupNewCommentForm.setBasicValues();
   };

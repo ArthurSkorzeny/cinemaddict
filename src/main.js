@@ -4,7 +4,7 @@ import CommentsModel from './model/comments-model.js';
 import CardsApiService from './api-services/cards-api-service';
 import CommentsApiService from './api-services/comments-api-sevice.js';
 
-const AUTHORIZATION = 'Basic dfhjkd433wsysg34';
+const AUTHORIZATION = 'Basic dfhjkd4337fwsyg34';
 const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
 
 const siteHeaderElement = document.querySelector('.header');
