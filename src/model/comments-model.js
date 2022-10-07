@@ -34,6 +34,7 @@ export default class CommentsModel extends Observable{
       this.#comments = response.comments;
 
     }catch{
+      this._notify(EventValues.FAIL);
       throw new Error('Can\'t add comment');
     }
 
@@ -46,9 +47,11 @@ export default class CommentsModel extends Observable{
       await this.#apiService.deleteComment(comment);
 
     } catch (err) {
+      this._notify(EventValues.FAIL);
       throw new Error('Cant delete comment');
     }
 
     this._notify(EventValues.SUCCES);
+    this.#comments = [];
   };
 }

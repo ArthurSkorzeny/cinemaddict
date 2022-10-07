@@ -1,9 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 
-let type = 'Delete';
 
-const createFilmDetailsCommentTemplate = (comment) => (
+const createFilmDetailsCommentTemplate = (comment, buttonStatus) => (
   `<li class="film-details__comment">
    <span class="film-details__comment-emoji">
      <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
@@ -13,7 +12,7 @@ const createFilmDetailsCommentTemplate = (comment) => (
      <p class="film-details__comment-info">
        <span class="film-details__comment-author">${comment.author}</span>
        <span class="film-details__comment-day">${dayjs(comment.date).format('YYYY/M/D h:mm')}</span>
-       <button class="film-details__comment-delete">${type}</button>
+       <button class="film-details__comment-delete">${buttonStatus}</button>
      </p>
    </div>
    </li>`
@@ -22,34 +21,17 @@ const createFilmDetailsCommentTemplate = (comment) => (
 
 export default class FilmCommentView extends AbstractView{
   #comment = null;
+  #buttonStatus = null;
 
-  constructor(comment){
+  constructor(comment, buttonStatus){
     super();
     this.#comment = comment;
+    this.#buttonStatus = buttonStatus;
   }
 
   get template() {
-    return createFilmDetailsCommentTemplate(this.#comment);
+    return createFilmDetailsCommentTemplate(this.#comment, this.#buttonStatus);
   }
-
-  onDeleteButtonClick = () => {
-
-    this.element.querySelector('.film-details__comment-delete').addEventListener('click', () => {
-      type = 'Deleting...';
-      this.rerenderElement();
-    });
-  };
-
-  rerenderElement = () => {
-    const prevElement = this.element;
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.element;
-
-    parent.replaceChild(newElement, prevElement);
-
-  };
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();

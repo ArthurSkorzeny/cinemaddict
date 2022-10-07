@@ -1,15 +1,3 @@
-const FilterType = {
-  ALL: 'all',
-  HISTORY: 'history',
-  FAVORITES: 'favorites'
-};
-
-const UserAction = {
-  UPDATE_CARD: 'UPDATE_TASK',
-  //удалить комм
-  //добав комм
-};
-
 const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
@@ -39,7 +27,12 @@ const Method = {
 
 const EventValues = {
   'SUCCES': 'SUCCES',
-  'FAIL': 'SUCCES'
+  'FAIL': 'FAIL'
 };
 
-export {UserAction, UpdateType, FilterType, sortModes, filterModes, Method, EventValues};
+const CommentDeleteStatus = {
+  'DELETE': 'Delete',
+  'DELETING': 'Deleting...'
+};
+
+export {UpdateType, sortModes, filterModes, Method, EventValues, CommentDeleteStatus};

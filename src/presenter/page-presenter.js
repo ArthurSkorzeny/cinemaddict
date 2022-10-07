@@ -4,8 +4,8 @@ import {sortModes, filterModes, UpdateType} from '../const.js';
 
 import FilmPresenter from './film-presenter.js';
 
-import SortButtonsView from '../view/sort-view.js';
-import FilterButtonsView from '../view/filter-view.js';
+import SortButtonsView from '../view/sort-buttons-view.js';
+import FilterButtonsView from '../view/filter-buttons-view.js';
 import FilmsView from '../view/films-view.js';
 import ShowMoreButtonView from '../view/show-more-view.js';
 import FilmsListView from '../view/film-list-view.js';
@@ -41,7 +41,7 @@ export default class PagePresenter {
   #emptyFilmListComponent = new EmptyFilmsListView();
   #loadingComponent = new LoadingView();
   #userProfileComponent = new UserProfileView();
-  #footerStatiscticComponent = null;
+  #footerStatisticComponent = null;
 
   #currentSortType = sortModes.default;
   #currentFilterType = filterModes.all;
@@ -86,6 +86,7 @@ export default class PagePresenter {
       'pageContainer':this.#pageContainer,
       'sortButtonsHandler':this.#sortButtonsHandler,
       'commentsModel': this.#commentsModel,
+      'cardModel': this.#cardsModel
     };
 
     const filmPresenter = new FilmPresenter(filmPresenterArguments);
@@ -103,7 +104,7 @@ export default class PagePresenter {
     remove(this.#filterButtonsComponent);
     remove(this.#sortButtonsComponent);
     remove(this.#filmsComponent);
-    remove(this.#footerStatiscticComponent);
+    remove(this.#footerStatisticComponent);
     remove(this.#showMoreButtonComponent);
   };
 
@@ -144,6 +145,7 @@ export default class PagePresenter {
 
     if(this.#currentFilterType !== filterModes.all && this.#cardsList.length === 0){
       this.#emptyFilterFilmListComponent = new EmptyFilterFilmListView(this.#currentFilterType);
+      document.querySelector('.film-details').remove();
       render(this.#emptyFilterFilmListComponent, this.#filmListComponent.element);
     } else {
       render(this.#filmListContainerComponent, this.#filmListComponent.element);
@@ -200,8 +202,8 @@ export default class PagePresenter {
   };
 
   #renderFooterStatistic = () => {
-    this.#footerStatiscticComponent = new FooterStatisticView(this.cards.length);
-    render(this.#footerStatiscticComponent, this.#footerContainer);
+    this.#footerStatisticComponent = new FooterStatisticView(this.cards.length);
+    render(this.#footerStatisticComponent, this.#footerContainer);
   };
 
   #renderLoading = () => {

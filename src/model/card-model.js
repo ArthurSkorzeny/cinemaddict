@@ -1,5 +1,5 @@
 import Observable from '../framework/observable.js';
-import {UpdateType} from '../const.js';
+import {UpdateType, EventValues} from '../const.js';
 
 
 export default class CardsModel extends Observable{
@@ -29,6 +29,7 @@ export default class CardsModel extends Observable{
     const index = this.#cards.findIndex((card) => card.id === update.id);
 
     if (index === -1) {
+      this._notify(EventValues.FAIL);
       throw new Error('Can\'t update unexisting card');
     }
 
@@ -42,6 +43,7 @@ export default class CardsModel extends Observable{
       ];
       this._notify(updateType, updatedCard);
     } catch(err) {
+      this._notify(EventValues.FAIL);
       throw new Error('Can\'t update film');
     }
   };
