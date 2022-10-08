@@ -1,5 +1,12 @@
-const hoursInMinutesArray = [60, 120, 180, 240, 300];
-const hourInMinutes = 60;
+const minutesInHours = {
+  'oneHour': 60,
+  'twoHours': 120,
+  'threeHours': 180,
+  'fourHours': 240,
+  'fiveHours': 300
+};
+
+const minutesInHour = 60;
 
 const getYear = (date) => date.replace(/['']+/g, '').substring(0, 4);
 
@@ -9,16 +16,16 @@ const sortByRating = (a, b) => (a.filmInfo.totalRating > b.filmInfo.totalRating)
 
 const getRuntimeFromMinutes = (valueFromServer) => {
 
-  if(valueFromServer < hourInMinutes){
+  if(valueFromServer < minutesInHour){
     return `${valueFromServer}m`;
   }
 
-  if(hoursInMinutesArray.includes(valueFromServer)){
+  if(Object.keys(minutesInHours).includes(valueFromServer)){
     return `${valueFromServer / 6 / 10}h`;
   }
 
-  if(valueFromServer > hourInMinutes){
-    return `${parseInt(valueFromServer / hourInMinutes, 10)}h ${valueFromServer % 60}m`;
+  if(valueFromServer > minutesInHour){
+    return `${parseInt(valueFromServer / minutesInHour, 10)}h ${valueFromServer % minutesInHour}m`;
   }
 };
 
