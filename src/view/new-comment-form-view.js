@@ -51,7 +51,7 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
   constructor() {
     super();
 
-    this.#setInnerHandlers();
+    this.setInnerHandlers();
   }
 
   get template() {
@@ -59,10 +59,10 @@ export default class FilmDetailsNewCommentFormView extends AbstractView{
   }
 
   _restoreHandlers = () => {
-    this.#setInnerHandlers();
+    this.setInnerHandlers();
   };
 
-  #setInnerHandlers = () => {
+  setInnerHandlers = () => {
 
     const emojiButtons = this.element.querySelectorAll('.film-details__emoji-item');
 
