@@ -101,6 +101,8 @@ export default class FilmPresenter {
       this.#handleOpenClick();
       remove(prevFilmPopupComponent);
     }
+
+    document.removeEventListener('keyup', this.#addCommentHandler);
   };
 
   resetView = () => {
@@ -126,6 +128,7 @@ export default class FilmPresenter {
     }
 
     if(result === EventValues.SUCCES){
+      document.removeEventListener('keyup', this.#addCommentHandler);
       this.#changeData(
         UpdateType.PATCH,
         {...this.#card});
@@ -133,6 +136,7 @@ export default class FilmPresenter {
   };
 
   #openPopup = () => {
+    document.addEventListener('keyup', this.#addCommentHandler);
     this.#commentsModel.addObserver(this.#handleDownloadEvent);
     this.#commentsModel.init(this.#card);
 
@@ -142,6 +146,7 @@ export default class FilmPresenter {
   };
 
   #closePopup = () => {
+    document.removeEventListener('keyup', this.#addCommentHandler);
     this.#clearCommentsInner();
     remove(this.#popupSection);
     this.#popupComponent.deleteHideOverFlowFromBody();
@@ -169,6 +174,8 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    document.removeEventListener('keyup', this.#addCommentHandler);
     if(this.#mode === Mode.POPUP){
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
@@ -191,6 +198,8 @@ export default class FilmPresenter {
   };
 
   #handleWatchListClick = () => {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    document.removeEventListener('keyup', this.#addCommentHandler);
     if(this.#mode === Mode.POPUP){
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
@@ -208,6 +217,8 @@ export default class FilmPresenter {
   };
 
   #handleWatchedClick = () => {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    document.removeEventListener('keyup', this.#addCommentHandler);
     if(this.#mode === Mode.POPUP){
       this.#scrollPosition = this.#popupComponent.getScrollPosition();
     }
@@ -276,9 +287,9 @@ export default class FilmPresenter {
 
   #addCommentHandler = (evt) => {
     if (evt.key === 'Enter' && evt.ctrlKey) {
+      document.removeEventListener('keyup', this.#addCommentHandler);
       evt.preventDefault();
       this.#handleNewComment();
-      document.removeEventListener('keyup', this.#addCommentHandler);
     }
   };
 
@@ -289,7 +300,6 @@ export default class FilmPresenter {
     this.#renderComments(this.comments);
     render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
     this.#popupNewCommentForm.setInnerHandlers();
-    document.addEventListener('keyup', this.#addCommentHandler);
     this.#commentsModel.removeObserver(this.#handleDownloadEvent);
     this.#popupComponent.scrollToNedeedPosition(this.#scrollPosition);
   };

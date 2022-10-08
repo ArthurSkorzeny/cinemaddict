@@ -52,6 +52,7 @@ export default class CommentPresenter {
       this.#commentsModel.removeObserver(this.#onFailResult);
     }else{
       this.#commentEvent(result);
+      this.#commentsModel.removeObserver(this.#onFailResult);
     }
 
   };
