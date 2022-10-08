@@ -153,6 +153,9 @@ export default class PagePresenter {
     } else {
       render(this.#filmListContainerComponent, this.#filmListComponent.element);
       this.#filmDetails.deleteFilmDetailsSection();
+      this.#sortButtonsComponent.setDateClickHandler(this.#sortByDate);
+      this.#sortButtonsComponent.setDefaultClickHandler(this.#sortByDefault);
+      this.#sortButtonsComponent.setRatingClickHandler(this.#sortByRating);
     }
 
     this.#renderFilms(this.#cardsList.slice(0, Math.min(cardsCount, FILMS_PER_CLICK)));

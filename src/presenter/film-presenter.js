@@ -99,7 +99,6 @@ export default class FilmPresenter {
       this.#popupSection.deleteFilmDetailsSection();
       replace(this.#popupComponent, prevFilmPopupComponent);
       this.#handleOpenClick();
-      this.#popupComponent.scrollToNedeedPosition(this.#scrollPosition);
       remove(prevFilmPopupComponent);
     }
   };
@@ -184,6 +183,11 @@ export default class FilmPresenter {
           favorite: !this.#card.userDetails.favorite
         }
       });
+
+
+    if(this.#mode === Mode.POPUP){
+      this.#openPopup();
+    }
   };
 
   #handleWatchListClick = () => {
@@ -270,19 +274,24 @@ export default class FilmPresenter {
     comments.forEach((comment) => this.#renderComment(comment));
   };
 
+  #addCommentHandler = (evt) => {
+    if (evt.key === 'Enter' && evt.ctrlKey) {
+      evt.preventDefault();
+      this.#handleNewComment();
+      document.removeEventListener('keyup', this.#addCommentHandler);
+    }
+  };
+
   #renderCommentsInner = () => {
     render(this.#popupBottomContainer, this.#popupInner.element);
     render(this.#popupCommentsWrap, this.#popupBottomContainer.element);
     render(this.#popupCommentsList, this.#popupCommentsWrap.element);
     this.#renderComments(this.comments);
     render(this.#popupNewCommentForm, this.#popupCommentsWrap.element);
-    document.addEventListener('keydown', (evt)=> {
-      if (evt.key === 'Enter' && evt.ctrlKey) {
-        evt.preventDefault();
-        this.#handleNewComment();
-      }
-    });
+    this.#popupNewCommentForm.setInnerHandlers();
+    document.addEventListener('keyup', this.#addCommentHandler);
     this.#commentsModel.removeObserver(this.#handleDownloadEvent);
+    this.#popupComponent.scrollToNedeedPosition(this.#scrollPosition);
   };
 
   #clearCommentsInner = () => {
