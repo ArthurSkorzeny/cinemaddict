@@ -149,7 +149,11 @@ export default class FilmPopupView extends AbstractView{
 
   getScrollPosition = () => document.querySelector('.film-details').scrollTop;
 
-  scrollToNedeedPosition = (position) => {document.querySelector('.film-details').scrollTop += position;};
+  scrollToNedeedPosition = (position) => {
+    if(document.querySelector('.film-details')){
+      document.querySelector('.film-details').scrollTop += position;
+    }
+  };
 
   deleteHideOverFlowFromBody = () => document.querySelector('body').removeAttribute('class', 'hide-overflow');
 }
